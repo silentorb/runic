@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runic", "Runic\Runic.csproj", "{B29C3F78-B6F4-462F-88E6-5965513D345E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runic_Test", "Runic_Test\Runic_Test.csproj", "{ECB74910-9291-4847-93E2-15D2A939763F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B29C3F78-B6F4-462F-88E6-5965513D345E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B29C3F78-B6F4-462F-88E6-5965513D345E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B29C3F78-B6F4-462F-88E6-5965513D345E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B29C3F78-B6F4-462F-88E6-5965513D345E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECB74910-9291-4847-93E2-15D2A939763F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECB74910-9291-4847-93E2-15D2A939763F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECB74910-9291-4847-93E2-15D2A939763F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECB74910-9291-4847-93E2-15D2A939763F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
