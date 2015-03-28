@@ -97,11 +97,8 @@ namespace runic.parser
             throw new Exception("Not supported.");
         }
 
-        public Legend read(List<Rune> runes, string start_name = null)
+        public Legend read(List<Rune> runes, string start_name = "start")
         {
-            if (start_name == null)
-                start_name = "start";
-
             var start = rhymes[start_name];
             return read(runes, start);
         }
@@ -122,13 +119,19 @@ namespace runic.parser
             }
 
             var furthest = runes[stone.tracker.furthest];
-            var last = stone.tracker.history.Last(h => h.success);
-            throw new Exception("Could not find match at "
-                + furthest.range.end.y + ":" + furthest.range.end.x
-                + ", " + furthest.whisper.name + "."
-                + "  Last match was " + last.rhyme.name + "."
+            var last = stone.tracker.history.LastOrDefault(h => h.success);
+            if (last == null)
+            {
+                throw new Exception("Could not find match at 1:1.");
+            }
+            else
+            {
+                throw new Exception("Could not find match at "
+                    + furthest.range.end.y + ":" + furthest.range.end.x
+                    + ", " + furthest.whisper.name + "."
+                    + "  Last match was " + last.rhyme.name + "."
                 );
-
+            }
         }
     }
 }
