@@ -70,6 +70,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="retreat\Legend.cs" />
+    <Compile Include="retreat\Legend_Result.cs" />
+    <Compile Include="retreat\Parser.cs" />
+    <Compile Include="retreat\Parser_Grammar.cs" />
+    <Compile Include="retreat\Position.cs" />
+    <Compile Include="retreat\Range.cs" />
+    <Compile Include="retreat\rhymes\And_Rhyme.cs" />
+    <Compile Include="retreat\rhymes\String_Rhyme.cs" />
+    <Compile Include="retreat\rhymes\Or_Rhyme.cs" />
+    <Compile Include="retreat\rhymes\Regex_Rhyme.cs" />
+    <Compile Include="retreat\rhymes\Repetition_Rhyme.cs" />
+    <Compile Include="retreat\rhymes\Rhyme.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -81,6 +93,7 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\parser.grammar" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
