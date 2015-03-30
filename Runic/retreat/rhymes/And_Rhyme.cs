@@ -38,21 +38,9 @@ namespace runic.retreat.rhymes
             int match_count = 0;
             foreach (var rhyme in rhymes)
             {
-                var result = rhyme.match(stone, this);
+                var result = stone.parser.match(stone, rhyme, this, match_count > 0);
                 if (result == null)
-                {
-                    if (match_count == 0)
-                        return null;
-
-                    result = stone.parser.check_globals(stone);
-                    if (result == null)
-                        return null;
-
-                    stone = result.stone;
-                    result = rhyme.match(stone, this);
-                    if (result == null)
-                        return null;
-                }
+                    return null;
 
                 if (result.store_legend && !rhyme.is_ghost)
                     results.Add(result.legend);

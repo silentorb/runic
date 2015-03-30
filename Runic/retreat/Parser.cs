@@ -12,6 +12,7 @@ namespace runic.retreat
         internal static Parser_Grammar parser_grammar = new Parser_Grammar();
 
         public int furthest;
+        public Legend_Result furthest_legend_result;
         public List<Entry> history = new List<Entry>();
         public string code;
         public Grammar grammar;
@@ -30,7 +31,7 @@ namespace runic.retreat
 
         public void add_entry(string value, Rhyme rhyme, Position position)
         {
-            history.Add(new Entry(rhyme, position.index, value, this));
+            history.Add(new Entry(rhyme, position.index, value != null ? position.index + value.Length : position.index, value, this));
         }
 
         public static string get_safe_substring(string text, int start, int end)
@@ -44,11 +45,11 @@ namespace runic.retreat
             return text.Substring(start, end);
         }
 
-//        public Legend read(string code, string start_name = "start")
-//        {
-//            var start = rhymes[start_name];
-//            return read(code, start);
-//        }
+        //        public Legend read(string code, string start_name = "start")
+        //        {
+        //            var start = rhymes[start_name];
+        //            return read(code, start);
+        //        }
 
         public Legend read(string start_name = "start")
         {
@@ -58,28 +59,18 @@ namespace runic.retreat
 
             if (result != null)
             {
-                //                if (result.stone.is_at_end)
                 return result.legend;
-
-                //                if (runes.Skip(result.stone.get_position())
-                //                    .All(r => r.whisper.has_attribute(Whisper.Attribute.optional)))
-                //                    return result.legend;
             }
 
-            //            var furthest = runes[stone.tracker.furthest];
-            //            var last = stone.tracker.history.LastOrDefault(h => h.success);
-            //            if (last == null)
-            //            {
-            throw new Exception("Could not find match at 1:1.");
-            //            }
-            //            else
-            //            {
-            //                throw new Exception("Could not find match at "
-            //                    + furthest.range.end.y + ":" + furthest.range.end.x
-            //                    + ", " + furthest.whisper.name + "."
-            //                    + "  Last match was " + last.rhyme.name + "."
-            //                );
-            //            }
+            if (furthest_legend_result == null)
+            {
+                throw new Exception("Could not find match at 1:1.");
+            }
+            else
+            {
+                throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
+            }
+
         }
 
         public Legend_Result check_globals(Position position)
@@ -88,9 +79,37 @@ namespace runic.retreat
             {
                 var result = rhyme.match(position, null);
                 if (result != null)
+                {
+                    rhyme.match(position, null);
                     return result;
+                }
             }
             return null;
+        }
+
+        public Legend_Result match(Position stone, Rhyme rhyme, Rhyme parent, bool use_global = true)
+        {
+            var result = rhyme.match(stone, parent);
+            if (result == null)
+            {
+                if (!use_global)
+                {
+                    stone.parser.add_entry(null, rhyme, stone);
+                    return null;
+                }
+
+                var global_result = check_globals(stone);
+                if (global_result == null)
+                    return null;
+
+                stone.parser.add_entry(global_result.legend.text, global_result.legend.rhyme, stone);
+                result = rhyme.match(global_result.stone, parent);
+            }
+
+            if (result != null)
+                stone.parser.add_entry(result.legend.text, result.legend.rhyme, stone);
+
+            return result;
         }
     }
 }

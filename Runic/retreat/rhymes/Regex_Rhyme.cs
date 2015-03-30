@@ -45,8 +45,7 @@ namespace runic.retreat.rhymes
             if (value == "")
                 throw new Exception("Invalid regex: " + name + ".");
 
-            position.parser.add_entry(value, this, position);
-            return new Legend_Result(new String_Legend(this, value), position.forward(match.Length).clone());
+            return new Legend_Result(new String_Legend(this, value), position.forward(match.Length));
         }
 
         public override IEnumerable<Rhyme> aggregate()

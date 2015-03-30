@@ -84,7 +84,7 @@
     <Compile Include="retreat\rhymes\Regex_Rhyme.cs" />
     <Compile Include="retreat\rhymes\Repetition_Rhyme.cs" />
     <Compile Include="retreat\rhymes\Rhyme.cs" />
-    <Compile Include="retreat\Tracker.cs" />
+    <Compile Include="retreat\Entry.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

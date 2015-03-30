@@ -31,10 +31,7 @@ namespace runic.retreat.rhymes
         {
             var slice = Parser.get_safe_substring(position.source, position.index, pattern.Length);
             if (slice == pattern)
-            {
-                position.parser.add_entry(pattern, this, position);
-                return new Legend_Result(new String_Legend(this, pattern), position.forward(pattern.Length).clone());
-            }
+                return new Legend_Result(new String_Legend(this, pattern), position.forward(pattern.Length));
 
             return null;
         }

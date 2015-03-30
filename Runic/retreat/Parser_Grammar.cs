@@ -32,7 +32,7 @@ namespace runic.retreat
             var repetition = new And_Rhyme("repetition", new List<Rhyme>
             {
                 new Regex_Rhyme(@"@\("),
-                new Repetition_Rhyme(id, comma, 3, 4),
+                new Repetition_Rhyme(id, comma, 3, 4) { name = "rep_params" },
                 end_rep
             });
 

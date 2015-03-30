@@ -67,10 +67,11 @@ namespace runic.retreat.rhymes
 
             var final_stone = stone;
             var track_dividers = divider != null && has_variable_dividers;
-
+            int match_count = -1;
             do
             {
-                var main_result = rhyme.match(stone, this);
+                ++match_count;
+                var main_result = stone.parser.match(stone, rhyme, this, match_count > 0);
                 if (main_result == null)
                     break;
 
@@ -81,7 +82,7 @@ namespace runic.retreat.rhymes
 
                 if (divider != null)
                 {
-                    var divider_result = divider.match(stone, this);
+                    var divider_result = stone.parser.match(stone, divider, this);
 
                     if (divider_result == null)
                         break;

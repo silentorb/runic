@@ -11,14 +11,16 @@ namespace runic.retreat
     public class Entry
     {
         public Rhyme rhyme;
-        public int index;
+        public int start;
+        public int end;
         public Parser parser;
         public string value;
 
-        public Entry(Rhyme rhyme, int index, string value, Parser parser)
+        public Entry(Rhyme rhyme, int start, int end, string value, Parser parser)
         {
             this.rhyme = rhyme;
-            this.index = index;
+            this.start = start;
+            this.end = end;
             this.value = value;
             this.parser = parser;
         }
@@ -27,9 +29,11 @@ namespace runic.retreat
         {
             get
             {
-                return value != null
-                    ? rhyme.name + " " + value
-                    : "No match";
+                var suffix = value != null
+                    ? " " + value
+                    : " NO MATCH (" + Parser.get_safe_substring(parser.code, start, 10) + ")";
+
+                return start + "-" + end + " " + rhyme.name + " " + suffix;
             }
         }
     }
