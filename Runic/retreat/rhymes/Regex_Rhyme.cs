@@ -22,7 +22,7 @@ namespace runic.retreat.rhymes
             regex = new Regex("\\G" + pattern);
         }
 
-        public override void initialize(Legend pattern, Parser parser)
+        public override void initialize(Legend pattern, Loaded_Grammar grammar)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +45,8 @@ namespace runic.retreat.rhymes
             if (value == "")
                 throw new Exception("Invalid regex: " + name + ".");
 
-            return new Legend_Result(new String_Legend(this, value), position);
+            position.parser.add_entry(value, this, position);
+            return new Legend_Result(new String_Legend(this, value), position.forward(match.Length).clone());
         }
 
         public override IEnumerable<Rhyme> aggregate()

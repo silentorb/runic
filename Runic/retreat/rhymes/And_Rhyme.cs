@@ -24,9 +24,9 @@ namespace runic.retreat.rhymes
                 single_non_ghost = rhymes.First(r => !r.is_ghost);
         }
 
-        public override void initialize(Legend pattern, Parser parser)
+        public override void initialize(Legend pattern, Loaded_Grammar grammar)
         {
-            rhymes = pattern.children.Select(parser.create_child).ToList();
+            rhymes = pattern.children.Select(grammar.create_child).ToList();
 
             if (rhymes.Count(r => !r.is_ghost) == 1)
                 single_non_ghost = rhymes.First(r => !r.is_ghost);
@@ -35,15 +35,29 @@ namespace runic.retreat.rhymes
         public override Legend_Result match(Position stone, Rhyme parent)
         {
             var results = new List<Legend>();
+            int match_count = 0;
             foreach (var rhyme in rhymes)
             {
                 var result = rhyme.match(stone, this);
                 if (result == null)
-                    return null;
+                {
+                    if (match_count == 0)
+                        return null;
+
+                    result = stone.parser.check_globals(stone);
+                    if (result == null)
+                        return null;
+
+                    stone = result.stone;
+                    result = rhyme.match(stone, this);
+                    if (result == null)
+                        return null;
+                }
 
                 if (result.store_legend && !rhyme.is_ghost)
                     results.Add(result.legend);
 
+                ++match_count;
                 stone = result.stone;
             }
 

@@ -70,8 +70,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="retreat\Grammar.cs" />
     <Compile Include="retreat\Legend.cs" />
     <Compile Include="retreat\Legend_Result.cs" />
+    <Compile Include="retreat\Loaded_Grammar.cs" />
     <Compile Include="retreat\Parser.cs" />
     <Compile Include="retreat\Parser_Grammar.cs" />
     <Compile Include="retreat\Position.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="retreat\rhymes\Regex_Rhyme.cs" />
     <Compile Include="retreat\rhymes\Repetition_Rhyme.cs" />
     <Compile Include="retreat\rhymes\Rhyme.cs" />
+    <Compile Include="retreat\Tracker.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

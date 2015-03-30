@@ -37,13 +37,13 @@ namespace runic.retreat.rhymes
             this.max = max;
         }
 
-        public override void initialize(Legend pattern, Parser parser)
+        public override void initialize(Legend pattern, Loaded_Grammar grammar)
         {
             if (pattern.type != "repetition")
                 pattern = pattern.children[0];
 
             var patterns = pattern.children[0].children;
-            rhyme = parser.get_whisper_rhyme(patterns[0].text);
+            rhyme = grammar.get_whisper_rhyme(patterns[0].text);
             if (patterns.Count == 3)
             {
                 min = int.Parse(patterns[1].text);
@@ -51,7 +51,7 @@ namespace runic.retreat.rhymes
             }
             else
             {
-                divider = parser.get_whisper_rhyme(patterns[1].text);
+                divider = grammar.get_whisper_rhyme(patterns[1].text);
                 min = int.Parse(patterns[2].text);
                 max = int.Parse(patterns[3].text);
                 //                has_variable_dividers = divider.aggregate().OfType<Or_Rhyme>().Any();

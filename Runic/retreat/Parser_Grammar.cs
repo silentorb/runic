@@ -6,13 +6,11 @@ using runic.retreat.rhymes;
 
 namespace runic.retreat
 {
-    class Parser_Grammar
+    class Parser_Grammar:Grammar
     {
-        public Rhyme start;
-
         public Parser_Grammar()
         {
-            start = generate();
+            rhymes["start"] = generate();
         }
 
         public Rhyme generate()
@@ -27,6 +25,9 @@ namespace runic.retreat
             var regex = new Regex_Rhyme("regex", @"/([^/]+)/");
             var spaces = new Regex_Rhyme("spaces", @"[ \t]+");
             var newlines = new Regex_Rhyme("newlines", @"(\s*\n)+\s*");
+
+            global_rhymes.Add(spaces);
+            global_rhymes.Add(newlines);
 
             var repetition = new And_Rhyme("repetition", new List<Rhyme>
             {

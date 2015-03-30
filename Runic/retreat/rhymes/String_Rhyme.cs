@@ -22,7 +22,7 @@ namespace runic.retreat.rhymes
             this.pattern = pattern;
         }
 
-        public override void initialize(Legend pattern, Parser parser)
+        public override void initialize(Legend pattern, Loaded_Grammar grammar)
         {
             throw new NotImplementedException();
         }
@@ -30,9 +30,13 @@ namespace runic.retreat.rhymes
         public override Legend_Result match(Position position, Rhyme parent)
         {
             var slice = Parser.get_safe_substring(position.source, position.index, pattern.Length);
-            return slice == pattern
-                ? new Legend_Result(new String_Legend(this, pattern), position)
-                : null;
+            if (slice == pattern)
+            {
+                position.parser.add_entry(pattern, this, position);
+                return new Legend_Result(new String_Legend(this, pattern), position.forward(pattern.Length).clone());
+            }
+
+            return null;
         }
 
         public override IEnumerable<Rhyme> aggregate()

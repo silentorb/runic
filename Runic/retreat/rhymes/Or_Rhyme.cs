@@ -21,9 +21,9 @@ namespace runic.retreat.rhymes
             this.rhymes = rhymes;
         }
 
-        public override void initialize(Legend pattern, Parser parser)
+        public override void initialize(Legend pattern, Loaded_Grammar grammar)
         {
-            rhymes = pattern.children.Select(p => parser.create_child(p)).ToList();
+            rhymes = pattern.children.Select(p => grammar.create_child(p)).ToList();
         }
 
         public override Legend_Result match(Position stone, Rhyme parent)

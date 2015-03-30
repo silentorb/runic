@@ -51,7 +51,7 @@ namespace runic.retreat.rhymes
             this.type = type;
         }
 
-        public abstract void initialize(Legend pattern, Parser parser);
+        public abstract void initialize(Legend pattern, Loaded_Grammar grammar);
         public abstract Legend_Result match(Position position, Rhyme parent);
         public abstract IEnumerable<Rhyme> aggregate();
 
