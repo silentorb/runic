@@ -59,11 +59,7 @@ namespace runic.retreat
 
             if (stone.index < code.Length)
             {
-                Legend_Result extra = null;
-                while ((extra = check_globals(stone)) != null && extra.stone.index > stone.index)
-                {
-                    stone = extra.stone;
-                }
+                stone = check_globals_greedy(stone);
 
                 if (stone.index < code.Length)
                 {
@@ -101,8 +97,24 @@ namespace runic.retreat
             return null;
         }
 
+        public Position check_globals_greedy(Position stone)
+        {
+            Legend_Result extra = null;
+            while ((extra = check_globals(stone)) != null && extra.stone.index > stone.index)
+            {
+                stone = extra.stone;
+            }
+
+            return stone;
+        }
+
         public Legend_Result match(Position stone, Rhyme rhyme, Rhyme parent, bool use_global = true)
         {
+//            if (!grammar.global_rhymes.Contains(rhyme))
+//            {
+//                stone = check_globals_greedy(stone);
+//            }
+
             var result = rhyme.match(stone, parent);
             if (result == null)
             {
