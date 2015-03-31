@@ -38,12 +38,17 @@ namespace runic.retreat.rhymes
 
         public override IEnumerable<Rhyme> aggregate()
         {
-            throw new NotImplementedException();
+            return new List<Rhyme>();
         }
 
         protected override List<Rhyme> get_single_type()
         {
-            throw new NotImplementedException();
+            return new List<Rhyme>();
+        }
+
+        public override bool is_ghost
+        {
+            get { return true; }
         }
     }
 }

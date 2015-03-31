@@ -18,7 +18,6 @@ namespace runic.retreat
             var id = new Regex_Rhyme("id", @"[\$a-zA-Z0-9_]+");
             var or = new String_Rhyme("or", "|");
             var string_value = new Regex_Rhyme("string", "\"([^\"]*)\"|\\G'([^']*)'");
-            var start_rep = new String_Rhyme("start_rep", "@(");
             var end_rep = new String_Rhyme("end_rep", ")");
             var equals = new String_Rhyme("equals", "=");
             var comma = new String_Rhyme("comma", ",");
@@ -26,20 +25,22 @@ namespace runic.retreat
             var spaces = new Regex_Rhyme("spaces", @"[ \t]+");
             var newlines = new Regex_Rhyme("newlines", @"(\s*\n)+\s*");
 
-            global_rhymes.Add(spaces);
             global_rhymes.Add(newlines);
+            global_rhymes.Add(spaces);
 
             var repetition = new And_Rhyme("repetition", new List<Rhyme>
             {
-                new Regex_Rhyme(@"@\("),
+                new String_Rhyme("@("),
                 new Repetition_Rhyme(id, comma, 3, 4) { name = "rep_params" },
                 end_rep
             });
 
             var option = new Or_Rhyme("option", new List<Rhyme>
             {
-                id,
-                repetition
+                repetition,
+                regex,
+                string_value,
+                id
             });
 
             var group = new Or_Rhyme("group", new List<Rhyme>
@@ -49,9 +50,17 @@ namespace runic.retreat
                 option
             });
 
+            var attributes = new And_Rhyme("attributes", new List<Rhyme>
+            {
+                new String_Rhyme("("),
+                new Repetition_Rhyme(id, comma, 0, 0),
+                new String_Rhyme(")"),
+            });
+
             var rule = new And_Rhyme("rule", new List<Rhyme>
             {
                 id,
+                new Repetition_Rhyme(attributes, 0, 1),
                 equals,
                 group
             });

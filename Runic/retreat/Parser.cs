@@ -55,7 +55,21 @@ namespace runic.retreat
         {
             var start = grammar.rhymes[start_name];
             var stone = new Position(code, this);
-            var result = start.match(stone, null);
+            var result = match(stone, start, null);
+
+            if (stone.index < code.Length)
+            {
+                Legend_Result extra = null;
+                while ((extra = check_globals(stone)) != null && extra.stone.index > stone.index)
+                {
+                    stone = extra.stone;
+                }
+
+                if (stone.index < code.Length)
+                {
+                    throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
+                }
+            }
 
             if (result != null)
             {
@@ -103,11 +117,12 @@ namespace runic.retreat
                     return null;
 
                 stone.parser.add_entry(global_result.legend.text, global_result.legend.rhyme, stone);
-                result = rhyme.match(global_result.stone, parent);
+                result = match(global_result.stone, rhyme, parent);
             }
 
-            if (result != null)
+            if (result != null && result.legend != null)
                 stone.parser.add_entry(result.legend.text, result.legend.rhyme, stone);
+
 
             return result;
         }
