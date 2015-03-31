@@ -51,42 +51,13 @@ namespace runic.retreat
         //            return read(code, start);
         //        }
 
-        public Legend read(string start_name = "start")
-        {
-            var start = grammar.rhymes[start_name];
-            var stone = new Position(code, this);
-            var result = match(stone, start, null);
-
-            if (stone.index < code.Length)
-            {
-                stone = check_globals_greedy(stone);
-
-                if (stone.index < code.Length)
-                {
-                    throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
-                }
-            }
-
-            if (result != null)
-            {
-                return result.legend;
-            }
-
-            if (furthest_legend_result == null)
-            {
-                throw new Exception("Could not find match at 1:1.");
-            }
-            else
-            {
-                throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
-            }
-
-        }
-
-        public Legend_Result check_globals(Position position)
+        public Legend_Result check_globals(Position position, Rhyme except = null)
         {
             foreach (var rhyme in grammar.global_rhymes)
             {
+                if (rhyme == except)
+                    continue;
+
                 var result = rhyme.match(position, null);
                 if (result != null)
                 {
@@ -97,10 +68,10 @@ namespace runic.retreat
             return null;
         }
 
-        public Position check_globals_greedy(Position stone)
+        public Position check_globals_greedy(Position stone, Rhyme except = null)
         {
             Legend_Result extra = null;
-            while ((extra = check_globals(stone)) != null && extra.stone.index > stone.index)
+            while ((extra = check_globals(stone, except)) != null && extra.stone.index > stone.index)
             {
                 stone = extra.stone;
             }
@@ -112,7 +83,7 @@ namespace runic.retreat
         {
 //            if (!grammar.global_rhymes.Contains(rhyme))
 //            {
-//                stone = check_globals_greedy(stone);
+                stone = check_globals_greedy(stone, rhyme);
 //            }
 
             var result = rhyme.match(stone, parent);
@@ -137,6 +108,39 @@ namespace runic.retreat
 
 
             return result;
+        }
+
+        public Legend read(string start_name = "start")
+        {
+            var start = grammar.rhymes[start_name];
+            var stone = new Position(code, this);
+            var result = match(stone, start, null);
+
+            if (result != null)
+            {
+                stone = result.stone;
+                if (stone.index < code.Length)
+                {
+                    stone = check_globals_greedy(stone);
+
+                    if (stone.index < code.Length)
+                    {
+                        throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
+                    }
+                }
+
+                return result.legend;
+            }
+
+            if (furthest_legend_result == null)
+            {
+                throw new Exception("Could not find match at 1:1.");
+            }
+            else
+            {
+                throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
+            }
+
         }
     }
 }
