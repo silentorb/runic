@@ -16,11 +16,6 @@ namespace runic.retreat
             this.legend = legend;
             this.stone = stone;
             store_legend = legend != null;
-            if (stone.index > stone.parser.furthest)
-            {
-                stone.parser.furthest = stone.index;
-                stone.parser.furthest_legend_result = this;
-            }
         }
     }
 

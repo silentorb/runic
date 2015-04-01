@@ -18,7 +18,8 @@ namespace runic.retreat.rhymes
     [DebuggerDisplay("Rhyme {name}")]
     public abstract class Rhyme
     {
-        public string name;
+        public string name { get; private set; }
+
         public Rhyme_Type type;
         public virtual bool is_ghost { get { return false; } }
 

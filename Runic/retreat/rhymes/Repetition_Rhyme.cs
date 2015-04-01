@@ -19,8 +19,8 @@ namespace runic.retreat.rhymes
 
         }
 
-        public Repetition_Rhyme(Rhyme rhyme, Rhyme divider, int min, int max)
-            : base(Rhyme_Type.repetition, null)
+        public Repetition_Rhyme(Rhyme rhyme, Rhyme divider, int min, int max, string name = null)
+            : base(Rhyme_Type.repetition, name)
         {
             this.rhyme = rhyme;
             this.divider = divider;
@@ -71,7 +71,15 @@ namespace runic.retreat.rhymes
             int match_count = -1;
             do
             {
-                ++match_count;
+                if (++match_count > 0)
+                    stone.parser.failure_stack.Pop();
+
+                if (rhyme.name == "enum")
+                {
+                    var x = 0;
+                } 
+                stone.parser.failure_stack.Push(rhyme);
+
                 var main_result = stone.parser.match(stone, rhyme, this, match_count > 0);
                 if (main_result == null)
                     break;
@@ -95,9 +103,14 @@ namespace runic.retreat.rhymes
             while (max == 0 || matches.Count < max);
 
             if (matches.Count < min)
-                return null;
+            {
+                if (matches.Count > 0)
+                    stone.parser.update_failure(stone, this, matches.Count);
 
-            stone.parser.add_entry(null, this,original_stone, stone);
+                return null;
+            }
+            stone.parser.failure_stack.Pop();
+            stone.parser.add_entry(null, this, original_stone, stone);
             // The equivalent of ? in a regex
             if (max == 1 && min == 0)
             {

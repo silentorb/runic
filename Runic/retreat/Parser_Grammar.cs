@@ -24,6 +24,7 @@ namespace runic.retreat
             var regex = new Regex_Rhyme("regex", @"/([^/]+)/");
             var spaces = new Regex_Rhyme("spaces", @"[ \t]+");
             var newlines = new Regex_Rhyme("newlines", @"(\s*\n)+\s*");
+            var spaces_no_newlines = new Regex_Rhyme("spaces_no_newlines", @"[ \t]+(?=\S)");
 
             global_rhymes.Add(newlines);
             global_rhymes.Add(spaces);
@@ -31,7 +32,7 @@ namespace runic.retreat
             var repetition = new And_Rhyme("repetition", new List<Rhyme>
             {
                 new String_Rhyme("@("),
-                new Repetition_Rhyme(id, comma, 3, 4) { name = "rep_params" },
+                new Repetition_Rhyme(id, comma, 3, 4, "rep_params"),
                 end_rep
             });
 
@@ -45,8 +46,8 @@ namespace runic.retreat
 
             var group = new Or_Rhyme("group", new List<Rhyme>
             {
-                new Repetition_Rhyme(option, or, 2, 0) { name = "or" },
-                new Repetition_Rhyme(option, spaces, 2, 0) { name = "and" },
+                new Repetition_Rhyme(option, or, 2, 0, "or"),
+                new Repetition_Rhyme(option, spaces_no_newlines, 2, 0, "and"),
                 option
             });
 

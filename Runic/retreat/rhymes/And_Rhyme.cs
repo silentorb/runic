@@ -36,20 +36,33 @@ namespace runic.retreat.rhymes
         {
             var original_stone = stone;
             var results = new List<Legend>();
-            int match_count = 0;
+            int match_count = -1;
             foreach (var rhyme in rhymes)
             {
+                if (++match_count > 0)
+                    stone.parser.failure_stack.Pop();
+
+                if (rhyme.name == "enum")
+                {
+                    var x = 0;
+                }
+                stone.parser.failure_stack.Push(rhyme);
+
                 var result = stone.parser.match(stone, rhyme, this, match_count > 0);
                 if (result == null)
+                {
+                    if (match_count > 0)
+                        stone.parser.update_failure(stone, this, match_count);
+
                     return null;
+                }
 
                 if (result.store_legend && !rhyme.is_ghost)
                     results.Add(result.legend);
 
-                ++match_count;
                 stone = result.stone;
             }
-
+            stone.parser.failure_stack.Pop();
             stone.parser.add_entry(null, this, original_stone, stone);
 
             var legend = should_return_single(results, parent)

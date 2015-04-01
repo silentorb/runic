@@ -75,7 +75,7 @@ namespace runic.retreat
                     break;
 
                 case "string":
-                    result = new String_Rhyme(name, group.text);
+                    result = new String_Rhyme(name ?? group.text, group.text);
                     rhymes[group.text] = result;
                     break;
 

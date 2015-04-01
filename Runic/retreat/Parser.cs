@@ -11,8 +11,13 @@ namespace runic.retreat
     {
         internal static Parser_Grammar parser_grammar = new Parser_Grammar();
 
-        public int furthest;
-        public Legend_Result furthest_legend_result;
+        public int furthest_index;
+        public int furthest_failure_index;
+        public int furthest_failure_substeps;
+        public Entry furthest_success;
+        public Stack<Rhyme> failure_stack = new Stack<Rhyme>();
+        public Position furthest_failure_position;
+        public Rhyme furthest_failure;
         public List<Entry> history = new List<Entry>();
         public string code;
         public Grammar grammar;
@@ -31,8 +36,13 @@ namespace runic.retreat
 
         public void add_entry(string value, Rhyme rhyme, Position start, Position end)
         {
-//            if (value != null)
-                history.Add(new Entry(rhyme, start, end, value, this));
+            var entry = new Entry(rhyme, start, end, value, this);
+            history.Add(entry);
+            if (start.index >= furthest_index)
+            {
+                furthest_index = start.index;
+                furthest_success = entry;
+            }
         }
 
         public static string get_safe_substring(string text, int start, int end)
@@ -45,12 +55,6 @@ namespace runic.retreat
 
             return text.Substring(start, end);
         }
-
-        //        public Legend read(string code, string start_name = "start")
-        //        {
-        //            var start = rhymes[start_name];
-        //            return read(code, start);
-        //        }
 
         public Legend_Result check_globals(Position position, Rhyme except = null)
         {
@@ -82,34 +86,36 @@ namespace runic.retreat
             return last;
         }
 
+        public void update_failure(Position stone, Rhyme rhyme, int substeps)
+        {
+            if (stone.index > furthest_failure_index)
+            {
+                furthest_failure_position = stone;
+                furthest_failure_index = stone.index;
+                furthest_failure = rhyme;
+                furthest_failure_substeps = substeps;
+            }
+        }
+
         public Legend_Result match(Position stone, Rhyme rhyme, Rhyme parent, bool use_global = true)
         {
-//            var global_result = check_globals_greedy(stone, rhyme);
-//            if (global_result != null)
-//            {
-//                if (global_result.legend.rhyme == rhyme)
-//                    return global_result;
-//
-//                stone = global_result.stone;
-//            }
-
             var result = rhyme.match(stone, parent);
             if (result == null)
             {
-                if (!use_global)
+                if (use_global)
                 {
-                    //                    stone.parser.add_entry(null, rhyme, stone);
-                    return null;
+                    var global_result = check_globals(stone);
+                    if (global_result != null)
+                        result = match(global_result.stone, rhyme, parent);
                 }
-
-                var global_result = check_globals(stone);
-                if (global_result == null)
-                    return null;
-
-                //                stone.parser.add_entry(global_result.legend.text, global_result.legend.rhyme, stone);
-                result = match(global_result.stone, rhyme, parent);
             }
-
+//            if (result == null)
+//            {
+//            }
+//            else
+//            {
+//                    failure_stack.Pop();
+//            }
             return result;
         }
 
@@ -130,20 +136,20 @@ namespace runic.retreat
 
                     if (stone.index < code.Length)
                     {
-                        throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
+                        throw new Exception("Could not find match at " + furthest_success.end.get_position_string());
                     }
                 }
 
                 return result.legend;
             }
 
-            if (furthest_legend_result == null)
+            if (furthest_success == null)
             {
                 throw new Exception("Could not find match at 1:1.");
             }
             else
             {
-                throw new Exception("Could not find match at " + furthest_legend_result.stone.get_position_string());
+                throw new Exception("Could not find match at " + furthest_success.end.get_position_string());
             }
 
         }
