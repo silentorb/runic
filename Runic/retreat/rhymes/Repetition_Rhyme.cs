@@ -61,6 +61,7 @@ namespace runic.retreat.rhymes
 
         public override Legend_Result match(Position stone, Rhyme parent)
         {
+            var original_stone = stone;
             var matches = new List<Legend>();
             var dividers = new List<Legend>();
             Legend last_divider = null;
@@ -96,6 +97,7 @@ namespace runic.retreat.rhymes
             if (matches.Count < min)
                 return null;
 
+            stone.parser.add_entry(null, this,original_stone, stone);
             // The equivalent of ? in a regex
             if (max == 1 && min == 0)
             {

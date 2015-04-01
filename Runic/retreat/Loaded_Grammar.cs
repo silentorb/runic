@@ -18,14 +18,14 @@ namespace runic.retreat
             foreach (var pattern in children)
             {
                 var name = pattern.children[0].text;
-                rhymes[name] = create_rhyme(pattern);
+                rhymes[name] = create_root(pattern);
             }
 
             foreach (var pattern in children)
             {
                 var name = pattern.children[0].text;
                 var rhyme = rhymes[name];
-                rhyme.initialize(pattern.children[1], this);
+                rhyme.initialize(pattern.children[2], this);
             }
         }
 
@@ -36,56 +36,72 @@ namespace runic.retreat
             process_grammar(legend.children);
         }
 
-        Rhyme create_rhyme(Legend pattern)
+        Rhyme create_root(Legend pattern)
         {
-            var name = pattern.children[0].text;
-            var group = pattern.children[1];
-            var children = group.children;
+            var rhyme = create_rhyme(pattern.children[2], pattern.children[0].text);
+            var attributes = pattern.children[1];
+            if (attributes != null)
+            {
+                foreach (var attribute in attributes.children)
+                {
+                    if (attribute.text == "global")
+                        global_rhymes.Add(rhyme);
+                }
+            }
+
+            return rhyme;
+        }
+
+        Rhyme create_rhyme(Legend group, string name = null)
+        {
+            Rhyme result;
+
             switch (group.type)
             {
                 case "and":
-                    //                    if (children.Count > 1)
-                    return new And_Rhyme(name);
+                    result = new And_Rhyme(name);
+                    break;
 
-                //                    if (group.type == "repetition")
                 case "repetition":
-                    return new Repetition_Rhyme(name);
-
+                    result = new Repetition_Rhyme(name);
+                    break;
 
                 case "or":
-                    return new Or_Rhyme(name);
+                    result = new Or_Rhyme(name);
+                    break;
+
+                case "regex":
+                    result = new Regex_Rhyme(name, group.text);
+                    break;
+
+                case "string":
+                    result = new String_Rhyme(name, group.text);
+                    rhymes[group.text] = result;
+                    break;
+
+                default:
+                    throw new Exception("Not implemented.");
 
             }
 
-            throw new Exception("Not implemented.");
-            //            return new Single_Rhyme(name);
+            return result;
+        }
 
-            //            return null;
+        public Rhyme create_child(Legend pattern)
+        {
+            if (pattern.type == "id")
+            {
+                return rhymes[pattern.text];
+            }
+
+            var rhyme = create_rhyme(pattern);
+            rhyme.initialize(pattern, this);
+            return rhyme;
         }
 
         public Rhyme get_whisper_rhyme(string name)
         {
             return rhymes[name];
-            //            return rhymes.ContainsKey(name)
-            //                ? rhymes[name]
-            //                : new Single_Rhyme(name, lexer.whispers[name]);
         }
-
-        public Rhyme create_child(Legend pattern)
-        {
-            var text = pattern.text;
-            if (pattern.type == "id")
-                return get_whisper_rhyme(text);
-
-            if (pattern.type == "repetition")
-            {
-                var repetition = new Repetition_Rhyme(text);
-                repetition.initialize(pattern, this);
-                return repetition;
-            }
-
-            throw new Exception("Not supported.");
-        }
-
     }
 }

@@ -34,6 +34,7 @@ namespace runic.retreat.rhymes
 
         public override Legend_Result match(Position stone, Rhyme parent)
         {
+            var original_stone = stone;
             var results = new List<Legend>();
             int match_count = 0;
             foreach (var rhyme in rhymes)
@@ -48,6 +49,8 @@ namespace runic.retreat.rhymes
                 ++match_count;
                 stone = result.stone;
             }
+
+            stone.parser.add_entry(null, this, original_stone, stone);
 
             var legend = should_return_single(results, parent)
                 ? results[0]

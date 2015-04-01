@@ -24,7 +24,7 @@ namespace runic.retreat.rhymes
 
         public override void initialize(Legend pattern, Loaded_Grammar grammar)
         {
-            throw new NotImplementedException();
+
         }
 
         public override Legend_Result match(Position position, Rhyme parent)
@@ -37,15 +37,15 @@ namespace runic.retreat.rhymes
             for (var i = match.Groups.Count - 1; i > 1; --i)
             {
                 if (value == "")
-            {
-                value = match.Groups[match.Groups.Count - 2].Value;
+                    value = match.Groups[match.Groups.Count - 2].Value;
             }
-            }
-            
+
             if (value == "")
                 throw new Exception("Invalid regex: " + name + ".");
 
-            return new Legend_Result(new String_Legend(this, value), position.forward(match.Length));
+            var next = position.forward(match.Length);
+            position.parser.add_entry(value, this, position, next);
+            return new Legend_Result(new String_Legend(this, value), next);
         }
 
         public override IEnumerable<Rhyme> aggregate()

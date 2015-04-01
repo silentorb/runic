@@ -32,7 +32,10 @@ namespace runic.retreat.rhymes
             {
                 var result = rhyme.match(stone, this);
                 if (result != null)
+                {
+                    stone.parser.add_entry(null, this, stone, result.stone);
                     return result;
+                }
             }
 
             return null;

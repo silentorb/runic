@@ -29,9 +29,10 @@ namespace runic.retreat
             this.grammar = grammar;
         }
 
-        public void add_entry(string value, Rhyme rhyme, Position position)
+        public void add_entry(string value, Rhyme rhyme, Position start, Position end)
         {
-            history.Add(new Entry(rhyme, position.index, value != null ? position.index + value.Length : position.index, value, this));
+//            if (value != null)
+                history.Add(new Entry(rhyme, start, end, value, this));
         }
 
         public static string get_safe_substring(string text, int start, int end)
@@ -68,22 +69,28 @@ namespace runic.retreat
             return null;
         }
 
-        public Position check_globals_greedy(Position stone, Rhyme except = null)
+        public Legend_Result check_globals_greedy(Position stone, Rhyme except = null)
         {
             Legend_Result extra = null;
+            Legend_Result last = null;
             while ((extra = check_globals(stone, except)) != null && extra.stone.index > stone.index)
             {
                 stone = extra.stone;
+                last = extra;
             }
 
-            return stone;
+            return last;
         }
 
         public Legend_Result match(Position stone, Rhyme rhyme, Rhyme parent, bool use_global = true)
         {
-//            if (!grammar.global_rhymes.Contains(rhyme))
+//            var global_result = check_globals_greedy(stone, rhyme);
+//            if (global_result != null)
 //            {
-                stone = check_globals_greedy(stone, rhyme);
+//                if (global_result.legend.rhyme == rhyme)
+//                    return global_result;
+//
+//                stone = global_result.stone;
 //            }
 
             var result = rhyme.match(stone, parent);
@@ -91,7 +98,7 @@ namespace runic.retreat
             {
                 if (!use_global)
                 {
-                    stone.parser.add_entry(null, rhyme, stone);
+                    //                    stone.parser.add_entry(null, rhyme, stone);
                     return null;
                 }
 
@@ -99,13 +106,9 @@ namespace runic.retreat
                 if (global_result == null)
                     return null;
 
-                stone.parser.add_entry(global_result.legend.text, global_result.legend.rhyme, stone);
+                //                stone.parser.add_entry(global_result.legend.text, global_result.legend.rhyme, stone);
                 result = match(global_result.stone, rhyme, parent);
             }
-
-            if (result != null && result.legend != null)
-                stone.parser.add_entry(result.legend.text, result.legend.rhyme, stone);
-
 
             return result;
         }
@@ -121,7 +124,9 @@ namespace runic.retreat
                 stone = result.stone;
                 if (stone.index < code.Length)
                 {
-                    stone = check_globals_greedy(stone);
+                    var global_result = check_globals_greedy(stone);
+                    if (global_result != null)
+                        stone = global_result.stone;
 
                     if (stone.index < code.Length)
                     {

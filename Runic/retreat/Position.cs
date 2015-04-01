@@ -55,7 +55,7 @@ namespace runic.retreat
                 if (c == '\n')
                 {
                     ++y;
-                    x = 0;
+                    x = 1;
                 }
                 else if (c == '\t')
                 {
