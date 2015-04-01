@@ -65,22 +65,23 @@ namespace runic.retreat.rhymes
             var matches = new List<Legend>();
             var dividers = new List<Legend>();
             Legend last_divider = null;
-
+            stone.parser.depth++;
             var final_stone = stone;
             var track_dividers = divider != null && has_variable_dividers;
             int match_count = -1;
+
             do
             {
                 if (++match_count > 0)
-                    stone.parser.failure_stack.Pop();
+                    stone.parser.pop();
 
-                if (rhyme.name == "enum")
+                if (rhyme.name == "class_attribute")
                 {
                     var x = 0;
                 } 
                 stone.parser.failure_stack.Push(rhyme);
 
-                var main_result = stone.parser.match(stone, rhyme, this, match_count > 0);
+                var main_result = stone.parser.match(stone, rhyme, this);
                 if (main_result == null)
                     break;
 
@@ -107,10 +108,13 @@ namespace runic.retreat.rhymes
                 if (matches.Count > 0)
                     stone.parser.update_failure(stone, this, matches.Count);
 
+                stone.parser.depth--;
                 return null;
             }
-            stone.parser.failure_stack.Pop();
+            stone.parser.pop();
             stone.parser.add_entry(null, this, original_stone, stone);
+            stone.parser.depth--;
+
             // The equivalent of ? in a regex
             if (max == 1 && min == 0)
             {

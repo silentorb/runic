@@ -21,6 +21,7 @@ namespace runic.retreat
         public List<Entry> history = new List<Entry>();
         public string code;
         public Grammar grammar;
+        public int depth;
 
         public Parser(string code)
         {
@@ -32,6 +33,14 @@ namespace runic.retreat
         {
             this.code = code;
             this.grammar = grammar;
+        }
+
+        public void pop()
+        {
+            while (failure_stack.Count > depth)
+            {
+                failure_stack.Pop();
+            }
         }
 
         public void add_entry(string value, Rhyme rhyme, Position start, Position end)

@@ -15,7 +15,7 @@ namespace runic.retreat.rhymes
         text
     }
 
-    [DebuggerDisplay("Rhyme {name}")]
+    [DebuggerDisplay("{debug_info}")]
     public abstract class Rhyme
     {
         public string name { get; private set; }
@@ -25,7 +25,7 @@ namespace runic.retreat.rhymes
 
         public virtual string debug_info
         {
-            get { return name; }
+            get { return GetType().Name + " " + name; }
         }
 
         private bool initializing = false;
