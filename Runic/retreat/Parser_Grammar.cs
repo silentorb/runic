@@ -25,6 +25,7 @@ namespace runic.retreat
             var spaces = new Regex_Rhyme("spaces", @"[ \t]+");
             var newlines = new Regex_Rhyme("newlines", @"(\s*\n)+\s*");
             var spaces_no_newlines = new Regex_Rhyme("spaces_no_newlines", @"[ \t]+(?=\S)");
+            var final_trim = new Regex_Rhyme("final_trim", @"\s*$");
 
             global_rhymes.Add(newlines);
             global_rhymes.Add(spaces);

@@ -28,17 +28,20 @@ namespace runic.retreat.rhymes
 
         public override Legend_Result match(Position stone, Rhyme parent)
         {
+            Legend_Result failure = null;
             foreach (var rhyme in rhymes)
             {
                 var result = rhyme.match(stone, this);
-                if (result != null)
+                if (result.success)
                 {
-                    stone.parser.add_entry(null, this, stone, result.stone);
+                    stone.parser.add_entry(null, this, stone, result.end);
                     return result;
                 }
+                if (failure == null || result.steps >= failure.steps)
+                    failure = result;
             }
 
-            return null;
+            return new Legend_Result(false, stone, this, 0, failure);
         }
 
         override public IEnumerable<Rhyme> aggregate()

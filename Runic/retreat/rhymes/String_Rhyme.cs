@@ -34,9 +34,9 @@ namespace runic.retreat.rhymes
             {
                 var next = position.forward(pattern.Length);
                 position.parser.add_entry(pattern, this, position, next);
-                return new Legend_Result(new String_Legend(this, pattern), next);
+                return new Legend_Result(true, new String_Legend(this, pattern, position, next));
             }
-            return null;
+            return new Legend_Result(false, position, this);
         }
 
         public override IEnumerable<Rhyme> aggregate()

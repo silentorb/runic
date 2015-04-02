@@ -37,38 +37,31 @@ namespace runic.retreat.rhymes
             var original_stone = stone;
             var results = new List<Legend>();
             int match_count = -1;
-            stone.parser.depth++;
             foreach (var rhyme in rhymes)
             {
-                if (++match_count > 0)
-                    stone.parser.pop();
-
-                stone.parser.failure_stack.Push(rhyme);
+                ++match_count;
 
                 var result = stone.parser.match(stone, rhyme, this, match_count > 0);
-                if (result == null)
+                if (!result.success)
                 {
                     if (match_count > 0)
                         stone.parser.update_failure(stone, this, match_count);
 
-                    stone.parser.depth--;
-                    return null;
+                    return new Legend_Result(false, original_stone, this, match_count, result);
                 }
 
                 if (result.store_legend && !rhyme.is_ghost)
                     results.Add(result.legend);
 
-                stone = result.stone;
+                stone = result.end;
             }
-            stone.parser.pop();
-            stone.parser.depth--;
             stone.parser.add_entry(null, this, original_stone, stone);
 
             var legend = should_return_single(results, parent)
                 ? results[0]
-                : new Group_Legend(this, results);
+                : new Group_Legend(this, results, original_stone, stone);
 
-            return new Legend_Result(legend, stone);
+            return new Legend_Result(true, legend);
         }
 
         private static bool should_return_single(List<Legend> results, Rhyme parent)

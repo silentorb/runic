@@ -65,28 +65,26 @@ namespace runic.retreat.rhymes
             var matches = new List<Legend>();
             var dividers = new List<Legend>();
             Legend last_divider = null;
-            stone.parser.depth++;
             var final_stone = stone;
             var track_dividers = divider != null && has_variable_dividers;
             int match_count = -1;
+            Legend_Result main_result;
 
             do
             {
-                if (++match_count > 0)
-                    stone.parser.pop();
+                ++match_count;
 
                 if (rhyme.name == "class_attribute")
                 {
                     var x = 0;
-                } 
-                stone.parser.failure_stack.Push(rhyme);
+                }
 
-                var main_result = stone.parser.match(stone, rhyme, this);
-                if (main_result == null)
+                main_result = stone.parser.match(stone, rhyme, this);
+                if (!main_result.success)
                     break;
 
                 matches.Add(main_result.legend);
-                stone = final_stone = main_result.stone;
+                stone = final_stone = main_result.end;
                 if (track_dividers && last_divider != null)
                     dividers.Add(last_divider);
 
@@ -94,11 +92,11 @@ namespace runic.retreat.rhymes
                 {
                     var divider_result = stone.parser.match(stone, divider, this);
 
-                    if (divider_result == null)
+                    if (!divider_result.success)
                         break;
 
                     last_divider = divider_result.legend;
-                    stone = divider_result.stone;
+                    stone = divider_result.end;
                 }
             }
             while (max == 0 || matches.Count < max);
@@ -108,103 +106,21 @@ namespace runic.retreat.rhymes
                 if (matches.Count > 0)
                     stone.parser.update_failure(stone, this, matches.Count);
 
-                stone.parser.depth--;
-                return null;
+                return new Legend_Result(false, original_stone, this, matches.Count, main_result);
             }
-            stone.parser.pop();
             stone.parser.add_entry(null, this, original_stone, stone);
-            stone.parser.depth--;
 
             // The equivalent of ? in a regex
             if (max == 1 && min == 0)
             {
                 if (matches.Count == 1)
-                    return new Legend_Result(matches[0], final_stone);
+                    return new Legend_Result(true, matches[0]);
 
-                return new Legend_Result(null, final_stone) { store_legend = true };
+                return new Legend_Result(true, original_stone, this) { store_legend = true };
             }
 
-            return new Legend_Result(new Group_Legend(this, matches, dividers), final_stone);
-
-            //            return divider != null && has_variable_dividers
-            //                ? match_tracking_dividers(stone)
-            //                : match_not_tracking_dividers(stone);
+            return new Legend_Result(true, new Group_Legend(this, matches, original_stone, final_stone, dividers));
         }
-        //
-        //        public Legend_Result match_tracking_dividers(Runestone stone)
-        //        {
-        //            var matches = new List<Legend>();
-        //            var dividers = new List<Legend>();
-        //            Legend last_divider = null;
-        //
-        //            var final_stone = stone;
-        //
-        //            do
-        //            {
-        //                var main_result = rhyme.match(stone, this);
-        //                if (main_result == null)
-        //                    break;
-        //
-        //                matches.Add(main_result.legend);
-        //                stone = final_stone = main_result.stone;
-        //                if (last_divider != null)
-        //                    dividers.Add(last_divider);
-        //
-        //                var divider_result = divider.match(stone, this);
-        //
-        //                if (divider_result == null)
-        //                    break;
-        //
-        //                last_divider = divider_result.legend;
-        //                stone = divider_result.stone;
-        //            }
-        //            while (max == 0 || matches.Count < max);
-        //
-        //            if (matches.Count < min)
-        //                return null;
-        //
-        ////            if (matches.Count == 0)
-        ////                return new Legend_Result(null, stone);
-        //            if (max == 1)
-        //                return new Legend_Result(matches[0], final_stone);
-        //
-        //            return new Legend_Result(new Group_Legend(this, matches, dividers), final_stone);
-        //        }
-
-        //        public Legend_Result match_not_tracking_dividers(Runestone stone)
-        //        {
-        //            var matches = new List<Legend>();
-        //            var final_stone = stone;
-        //            do
-        //            {
-        //                var main_result = rhyme.match(stone, this);
-        //                if (main_result == null)
-        //                    break;
-        //
-        //                matches.Add(main_result.legend);
-        //                stone = final_stone = main_result.stone;
-        //
-        //                if (divider != null)
-        //                {
-        //                    var divider_result = divider.match(stone, this);
-        //                    if (divider_result == null)
-        //                        break;
-        //
-        //                    stone = divider_result.stone;
-        //                }
-        //            }
-        //            while (max == 0 || matches.Count < max);
-        //
-        //            if (matches.Count < min)
-        //                return null;
-        //
-        ////            if (matches.Count == 0)
-        ////                return new Legend_Result(null, stone);
-        //            if (matches.Count == 1 && max == 1)
-        //                return new Legend_Result(matches[0], final_stone);
-        //
-        //            return new Legend_Result(new Group_Legend(this, matches), final_stone);
-        //        }
 
         override public IEnumerable<Rhyme> aggregate()
         {

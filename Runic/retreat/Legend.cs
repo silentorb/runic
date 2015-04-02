@@ -19,6 +19,8 @@ namespace runic.retreat
 //        public Legend_Type type;
         public abstract string text { get; }
         public abstract List<Legend> children { get; }
+        public Position start;
+        public Position end;
 
         public virtual string type
         {
@@ -40,11 +42,13 @@ namespace runic.retreat
             get { return null; }
         }
 
-        public String_Legend(Rhyme rhyme, string text)
+        public String_Legend(Rhyme rhyme, string text, Position start, Position end)
         {
 //            type = Legend_Type.text;
             this.rhyme = rhyme;
             _text = text;
+            this.start = start;
+            this.end = end;
         }
     }
 
@@ -64,12 +68,14 @@ namespace runic.retreat
             get { return _children; }
         }
 
-        public Group_Legend(Rhyme rhyme, List<Legend> children, List<Legend> dividers = null)
+        public Group_Legend(Rhyme rhyme, List<Legend> children, Position start, Position end, List<Legend> dividers = null)
         {
 //            type = Legend_Type.group;
             this.rhyme = rhyme;
             _children = children;
             this.dividers = dividers;
+            this.start = start;
+            this.end = end;
         }
     }
 }

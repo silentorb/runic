@@ -31,7 +31,7 @@ namespace runic.retreat.rhymes
         {
             var match = regex.Match(position.source, position.index);
             if (!match.Success)
-                return null;
+                return new Legend_Result(false, position, this);
 
             var value = match.Groups[match.Groups.Count - 1].Value;
             for (var i = match.Groups.Count - 1; i > 1; --i)
@@ -45,7 +45,7 @@ namespace runic.retreat.rhymes
 
             var next = position.forward(match.Length);
             position.parser.add_entry(value, this, position, next);
-            return new Legend_Result(new String_Legend(this, value), next);
+            return new Legend_Result(true, new String_Legend(this, value, position, next));
         }
 
         public override IEnumerable<Rhyme> aggregate()
