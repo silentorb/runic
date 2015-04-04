@@ -6,7 +6,7 @@ using runic.retreat.rhymes;
 
 namespace runic.retreat
 {
-    class Parser_Grammar:Grammar
+    class Parser_Grammar : Grammar
     {
         public Parser_Grammar()
         {
@@ -25,7 +25,10 @@ namespace runic.retreat
             var spaces = new Regex_Rhyme("spaces", @"[ \t]+");
             var newlines = new Regex_Rhyme("newlines", @"(\s*\n)+\s*");
             var spaces_no_newlines = new Regex_Rhyme("spaces_no_newlines", @"[ \t]+(?=\S)");
-            var final_trim = new Regex_Rhyme("final_trim", @"\s*$");
+            var final_trim = new Regex_Rhyme("final_trim", @"\s*$")
+                {
+                   can_be_empty = true
+                };
 
             global_rhymes.Add(newlines);
             global_rhymes.Add(spaces);
@@ -67,7 +70,11 @@ namespace runic.retreat
                 group
             });
 
-            return new Repetition_Rhyme(rule, newlines, 1, 0);
+            return new And_Rhyme("start", new List<Rhyme>
+            {
+                new Repetition_Rhyme(rule, newlines, 1, 0),
+                final_trim
+            });
         }
     }
 }

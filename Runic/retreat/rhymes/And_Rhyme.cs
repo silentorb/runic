@@ -34,20 +34,23 @@ namespace runic.retreat.rhymes
 
         public override Legend_Result match(Position stone, Rhyme parent)
         {
+            if (name == "attributes")
+            {
+                var x = 0;
+            }
             var original_stone = stone;
             var results = new List<Legend>();
             int match_count = -1;
+            Legend_Result semi_failure = null;
             foreach (var rhyme in rhymes)
             {
                 ++match_count;
 
-                var result = stone.parser.match(stone, rhyme, this, match_count > 0);
+                var result = stone.parser.match(stone, rhyme, this);//, match_count > 0);
                 if (!result.success)
                 {
-                    if (match_count > 0)
-                        stone.parser.update_failure(stone, this, match_count);
-
-                    return new Legend_Result(false, original_stone, this, match_count, result);
+                        stone.parser.update_failure(result, match_count);
+                        return new Legend_Result(false, original_stone, this, match_count, result);
                 }
 
                 if (result.store_legend && !rhyme.is_ghost)
@@ -57,9 +60,16 @@ namespace runic.retreat.rhymes
             }
             stone.parser.add_entry(null, this, original_stone, stone);
 
-            var legend = should_return_single(results, parent)
-                ? results[0]
-                : new Group_Legend(this, results, original_stone, stone);
+            Legend legend;
+            if (should_return_single(results, parent))
+            {
+                legend = results[0];
+                legend.end = stone;
+            }
+            else
+            {
+                legend = new Group_Legend(this, results, original_stone, stone);
+            }
 
             return new Legend_Result(true, legend);
         }

@@ -33,7 +33,7 @@ namespace runic.retreat
         {
             var parser = new Parser(source, Parser.parser_grammar);
             var legend = parser.read();
-            process_grammar(legend.children);
+            process_grammar(legend.children[0].children);
         }
 
         Rhyme create_root(Legend pattern)
@@ -46,6 +46,8 @@ namespace runic.retreat
                 {
                     if (attribute.text == "global")
                         global_rhymes.Add(rhyme);
+                    if (attribute.text == "empty")
+                        ((Regex_Rhyme) rhyme).can_be_empty = true;
                 }
             }
 

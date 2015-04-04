@@ -31,7 +31,7 @@ namespace runic.retreat.rhymes
             Legend_Result failure = null;
             foreach (var rhyme in rhymes)
             {
-                var result = rhyme.match(stone, this);
+                var result = stone.parser.match(stone, rhyme, this);
                 if (result.success)
                 {
                     stone.parser.add_entry(null, this, stone, result.end);
@@ -43,6 +43,37 @@ namespace runic.retreat.rhymes
 
             return new Legend_Result(false, stone, this, 0, failure);
         }
+
+        /* public override Legend_Result match(Position stone, Rhyme parent)
+        {
+            Legend_Result failure = null;
+            for (var i = 0; i < rhymes.Count; ++i)
+            {
+                var rhyme = rhymes[i];
+
+                var result = rhyme.match(stone, this);
+                if (!result.success)
+                {
+                    var global_result = stone.parser.check_globals(stone);
+                    if (global_result != null && global_result.success)
+                    {
+                        stone = global_result.end;
+                        i--;
+                        continue;
+                    }
+
+                    if (failure == null || result.steps >= failure.steps)
+                        failure = result;
+                }
+                else if (result.success)
+                {
+                    stone.parser.add_entry(null, this, stone, result.end);
+                    return result;
+                }
+            }
+
+            return new Legend_Result(false, stone, this, 0, failure);
+        }*/
 
         override public IEnumerable<Rhyme> aggregate()
         {

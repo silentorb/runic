@@ -104,11 +104,13 @@ namespace runic.retreat.rhymes
             if (matches.Count < min)
             {
                 if (matches.Count > 0)
-                    stone.parser.update_failure(stone, this, matches.Count);
+                    stone.parser.update_failure(main_result, matches.Count);
 
                 return new Legend_Result(false, original_stone, this, matches.Count, main_result);
             }
             stone.parser.add_entry(null, this, original_stone, stone);
+
+            var last_failure = main_result.success == false ? main_result : null;
 
             // The equivalent of ? in a regex
             if (max == 1 && min == 0)
@@ -119,7 +121,11 @@ namespace runic.retreat.rhymes
                 return new Legend_Result(true, original_stone, this) { store_legend = true };
             }
 
-            return new Legend_Result(true, new Group_Legend(this, matches, original_stone, final_stone, dividers));
+            return new Legend_Result(true, new Group_Legend(this, matches, original_stone, final_stone, dividers))
+                {
+                    child = last_failure,
+                    steps = matches.Count
+                };
         }
 
         override public IEnumerable<Rhyme> aggregate()

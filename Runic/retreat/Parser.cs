@@ -12,12 +12,10 @@ namespace runic.retreat
         internal static Parser_Grammar parser_grammar = new Parser_Grammar();
 
         public int furthest_index;
-        public int furthest_failure_index;
         public int furthest_failure_substeps;
         public Entry furthest_success;
-        //        public Stack<Rhyme> failure_stack = new Stack<Rhyme>();
         public Position furthest_failure_position;
-        public Rhyme furthest_failure;
+        public Legend_Result furthest_failure;
         public List<Entry> history = new List<Entry>();
         public string code;
         public Grammar grammar;
@@ -91,15 +89,14 @@ namespace runic.retreat
             return last;
         }
 
-        public void update_failure(Position stone, Rhyme rhyme, int substeps)
+        public void update_failure(Legend_Result result, int substeps)
         {
-            if (stone.index > furthest_failure_index)
-            {
-                furthest_failure_position = stone;
-                furthest_failure_index = stone.index;
-                furthest_failure = rhyme;
-                furthest_failure_substeps = substeps;
-            }
+            if (result.start.index != furthest_success.end.index)
+                return;
+
+//            if (substeps <)
+            furthest_failure = result;
+            furthest_failure_substeps = substeps;
         }
 
         public Legend_Result match(Position stone, Rhyme rhyme, Rhyme parent, bool use_global = true)
@@ -130,21 +127,45 @@ namespace runic.retreat
             var stone = new Position(code, this);
             var result = match(stone, start, null);
 
-            if (result.success && stone.index == code.Length)
+            if (result.success && result.end.index == code.Length)
             {
                 return result.legend;
             }
 
-            var furthest_error = result.get_endpoint();
+//            var furthest_failure = result.get_endpoint();
             if (furthest_success == null)
             {
                 throw new Exception("Could not find match at 1:1.");
             }
             else
             {
-                throw new Exception("Could not find match at " + furthest_success.end.get_position_string());
+                var message = "Could not find match at " + furthest_success.end.get_position_string();
+                if (furthest_failure.rhyme != null)
+                {
+                    if (furthest_failure.rhyme.type == Rhyme_Type.text)
+                    {
+                        message += "  Expected '" + ((String_Rhyme)furthest_failure.rhyme).pattern + "' but got "
+                                   + furthest_failure.start.get_sample();
+                    }
+                    else if (furthest_failure.rhyme.type == Rhyme_Type.regex)
+                    {
+                        message += "Expected '" + ((Regex_Rhyme)furthest_failure.rhyme).regex + "' but got "
+                                   + furthest_failure.start.get_sample();
+                    }
+                }
+
+                throw new Exception(message);
             }
 
         }
+
+        public bool is_latest_failure(Legend_Result result)
+        {
+            return true;
+            return furthest_success != null
+                   && result.start.index == furthest_success.end.index;
+        }
+
+
     }
 }
