@@ -23,6 +23,7 @@ namespace runic.lexer
         public string name;
         public Attribute[] attributes;
         public Whisper_Type type;
+        public List<Whisper> targets;
 
         protected Whisper(Whisper_Type type, string name)
         {
@@ -35,6 +36,14 @@ namespace runic.lexer
         public bool has_attribute(Attribute attribute)
         {
             return attributes != null && attributes.Contains(attribute);
+        }
+
+        public void add_target(Whisper target)
+        {
+            if (targets == null)
+                targets = new List<Whisper>();
+
+            targets.Add(target);
         }
     }
 }

@@ -18,6 +18,10 @@ namespace runic.lexer
 
         public override Rune match(string input, Position position)
         {
+            if (name == "attribute_id")
+            {
+                var x = 0;
+            }
             var match = regex.Match(input, position.index);
             if (!match.Success)
                 return null;

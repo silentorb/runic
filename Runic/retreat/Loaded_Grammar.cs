@@ -45,7 +45,7 @@ namespace runic.retreat
                 foreach (var attribute in attributes.children)
                 {
                     if (attribute.text == "global")
-                        global_rhymes.Add(rhyme);
+//                        global_rhymes.Add(rhyme);
                     if (attribute.text == "empty")
                         ((Regex_Rhyme) rhyme).can_be_empty = true;
                 }

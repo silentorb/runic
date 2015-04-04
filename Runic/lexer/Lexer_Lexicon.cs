@@ -7,7 +7,8 @@ namespace runic.lexer
 {
     public class Lexer_Lexicon : Lexer
     {
-        public Regex_Whisper id = new Regex_Whisper("id", @"[\$a-zA-Z0-9_]+");
+        public Regex_Whisper id = new Regex_Whisper("id", @"[\$a-zA-Z0-9_]+>");
+        public Regex_Whisper attribute_id = new Regex_Whisper("attribute_id", @"[\$a-zA-Z0-9_]+");
         public String_Whisper or = new String_Whisper("or", "|");
         public Regex_Whisper string_value = new Regex_Whisper("string", "\"([^\"]*)\"|\\G'([^']*)'");
         public String_Whisper start_group = new String_Whisper("start_group", "(");
@@ -34,6 +35,7 @@ namespace runic.lexer
             add_whisper(end_group);
             add_whisper(regex);
             add_whisper(id);
+            add_whisper(attribute_id);
         }
     }
 }

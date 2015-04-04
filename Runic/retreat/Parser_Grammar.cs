@@ -30,8 +30,8 @@ namespace runic.retreat
                    can_be_empty = true
                 };
 
-            global_rhymes.Add(newlines);
-            global_rhymes.Add(spaces);
+//            global_rhymes.Add(newlines);
+//            global_rhymes.Add(spaces);
 
             var repetition = new And_Rhyme("repetition", new List<Rhyme>
             {

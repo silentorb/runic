@@ -61,33 +61,33 @@ namespace runic.retreat
 
             return text.Substring(start, end);
         }
-
-        public Legend_Result check_globals(Position position, Rhyme except = null)
-        {
-            foreach (var rhyme in grammar.global_rhymes)
-            {
-                if (rhyme == except)
-                    continue;
-
-                var result = rhyme.match(position, null);
-                if (result.success)
-                    return result;
-            }
-            return null;
-        }
-
-        public Legend_Result check_globals_greedy(Position stone, Rhyme except = null)
-        {
-            Legend_Result extra;
-            Legend_Result last = null;
-            while ((extra = check_globals(stone, except)) != null && extra.success && extra.end.index > stone.index)
-            {
-                stone = extra.end;
-                last = extra;
-            }
-
-            return last;
-        }
+//
+//        public Legend_Result check_globals(Position position, Rhyme except = null)
+//        {
+//            foreach (var rhyme in grammar.global_rhymes)
+//            {
+//                if (rhyme == except)
+//                    continue;
+//
+//                var result = rhyme.match(position, null);
+//                if (result.success)
+//                    return result;
+//            }
+//            return null;
+//        }
+//
+//        public Legend_Result check_globals_greedy(Position stone, Rhyme except = null)
+//        {
+//            Legend_Result extra;
+//            Legend_Result last = null;
+//            while ((extra = check_globals(stone, except)) != null && extra.success && extra.end.index > stone.index)
+//            {
+//                stone = extra.end;
+//                last = extra;
+//            }
+//
+//            return last;
+//        }
 
         public void update_failure(Legend_Result result, int substeps)
         {
@@ -102,15 +102,15 @@ namespace runic.retreat
         public Legend_Result match(Position stone, Rhyme rhyme, Rhyme parent, bool use_global = true)
         {
             var result = rhyme.match(stone, parent);
-            if (!result.success)
-            {
-                if (use_global)
-                {
-                    var global_result = check_globals(stone);
-                    if (global_result != null && global_result.success)
-                        result = match(global_result.end, rhyme, parent);
-                }
-            }
+//            if (!result.success)
+//            {
+//                if (use_global)
+//                {
+//                    var global_result = check_globals(stone);
+//                    if (global_result != null && global_result.success)
+//                        result = match(global_result.end, rhyme, parent);
+//                }
+//            }
             //            if (result == null)
             //            {
             //            }

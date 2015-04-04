@@ -55,6 +55,11 @@ namespace runic.lexer
                 add_whisper(name, create_whisper(pattern));
             }
 
+            foreach (var pattern in children)
+            {
+                initialize_whisper(pattern);
+            }
+
             foreach (var pattern in children.Where(p => p.children[2].children.Count > 1))
             {
                 var name = pattern.children[0].text;
@@ -70,6 +75,35 @@ namespace runic.lexer
             }
         }
 
+        void initialize_whisper(Legend source)
+        {
+            var attributes = source.children[1];
+            if (attributes == null)
+                return;
+
+            var name = source.children[0].text;
+            var whisper = (Whisper_Group)whispers[name];
+
+            var whisper_attributes = new List<Whisper.Attribute>();
+            foreach (var p in attributes.children)
+            {
+                if (p.text.Last() == '>')
+                {
+                    var other_name = p.text.Substring(0, p.text.Length - 1);
+                    whispers[other_name].add_target(whisper);
+                }
+                else
+                {
+                    Whisper.Attribute result;
+                    Enum.TryParse(p.text, out result);
+                    whisper_attributes.Add(result);
+                }
+            }
+
+            if (whisper_attributes.Count > 0)
+                whisper.attributes = whisper_attributes.ToArray();
+        }
+
         Whisper create_whisper(Legend source)
         {
             var name = source.children[0].text;
@@ -79,16 +113,6 @@ namespace runic.lexer
                 ? new Whisper_Group(name)
                 : create_sub_whisper(name, children[0]);
 
-            var attributes = source.children[1];
-            if (attributes != null)
-            {
-                whisper.attributes = attributes.children.Select(p =>
-                    {
-                        Whisper.Attribute result;
-                        Enum.TryParse(p.text, out result);
-                        return result;
-                    }).ToArray();
-            }
             return whisper;
         }
 
@@ -117,7 +141,7 @@ namespace runic.lexer
         {
             var result = new List<Rune>();
 
-//            int index = 0;
+            //            int index = 0;
             var position = new Position(input);
 
             while (position.index < input.Length)
