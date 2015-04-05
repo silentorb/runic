@@ -44,10 +44,6 @@ namespace runic.retreat.rhymes
             if (value == "" && !can_be_empty)
                 throw new Exception("Invalid regex: " + name + ".");
 
-            if (value == "null")
-            {
-                value = value;
-            }
             var next = position.forward(match.Length);
             position.parser.add_entry(value, this, position, next);
             return new Legend_Result(true, new String_Legend(this, value, position, next));

@@ -58,9 +58,9 @@ namespace runic.lexer
         }
 
 
-//        public static Position operator +(Position first, Position second)
-//        {
-//            return new Position();
-//        }
+        public string get_position_string()
+        {
+            return y + ":" + x;
+        }
     }
 }

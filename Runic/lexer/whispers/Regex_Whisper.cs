@@ -18,22 +18,42 @@ namespace runic.lexer
 
         public override Rune match(string input, Position position)
         {
-            if (name == "attribute_id")
-            {
-                var x = 0;
-            }
             var match = regex.Match(input, position.index);
             if (!match.Success)
                 return null;
 
+//            var value = match.Groups[match.Groups.Count - 1].Value;
+//            if (value == "")
+//            {
+//                if (match.Groups.Count == 2)
+//                    throw new Exception("Invalid regex");
+//
+//                value = match.Groups[match.Groups.Count - 2].Value;
+//            }
             var value = match.Groups[match.Groups.Count - 1].Value;
-            if (value == "")
+            for (var i = match.Groups.Count - 1; i > 1; --i)
             {
-                if (match.Groups.Count == 2)
-                    throw new Exception("Invalid regex");
-
-                value = match.Groups[match.Groups.Count - 2].Value;
+                if (value == "")
+                    value = match.Groups[match.Groups.Count - 2].Value;
             }
+
+            if (value == "")
+                throw new Exception("Invalid regex: " + name + ".");
+
+            if (targets != null)
+            {
+                var child_position = new Position(value);
+                foreach (var target in targets)
+                {
+                    var child_match = target.match(value, child_position);
+                    if (child_match != null && child_match.length == value.Length)
+                    {
+                        position.forward(value.Length);
+                        return child_match;
+                    }
+                }
+            }
+
             return new Rune(this, value, position.clone(), position.forward(match.Length).clone());
         }
     }

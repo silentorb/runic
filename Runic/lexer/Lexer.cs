@@ -82,7 +82,7 @@ namespace runic.lexer
                 return;
 
             var name = source.children[0].text;
-            var whisper = (Whisper_Group)whispers[name];
+            var whisper = whispers[name];
 
             var whisper_attributes = new List<Whisper.Attribute>();
             foreach (var p in attributes.children)
@@ -148,7 +148,7 @@ namespace runic.lexer
             {
                 var rune = next(input, position);
                 if (rune == null)
-                    throw new Exception("Could not find match at " + position.index + " " + get_safe_substring(input, position.index, 10));
+                    throw new Exception("Could not find match at " + position.get_position_string() + " " + get_safe_substring(input, position.index, 10));
 
                 if (rune.length == 0)
                     throw new Exception("Invalid Whisper:" + rune.whisper.name);
