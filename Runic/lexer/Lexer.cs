@@ -140,8 +140,6 @@ namespace runic.lexer
         public List<Rune> read(string input)
         {
             var result = new List<Rune>();
-
-            //            int index = 0;
             var position = new Position(input);
 
             while (position.index < input.Length)
@@ -154,7 +152,10 @@ namespace runic.lexer
                     throw new Exception("Invalid Whisper:" + rune.whisper.name);
 
                 if (!rune.whisper.has_attribute(Whisper.Attribute.ignore))
+                {
+                    rune.index = result.Count;
                     result.Add(rune);
+                }
             }
 
             return result;

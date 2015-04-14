@@ -48,7 +48,9 @@ namespace runic.parser.rhymes
                 return match(stone.next(), parent);
 
             stone.tracker.add_entry(false, this, stone.current);
-            return null;
+            var failure = Legend_Result.failure(this, stone, null, 0);
+            stone.tracker.update_failure(failure, 0);
+            return failure;
 
         }
 

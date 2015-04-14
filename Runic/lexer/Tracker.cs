@@ -29,6 +29,8 @@ namespace runic.lexer
             }
         }
 
+        public Entry furthest_success;
+        public Legend_Result furthest_failure;
         public int furthest;
         public List<Entry> history = new List<Entry>();
         public void add_entry(bool success, Rhyme rhyme, Rune rune)
@@ -36,5 +38,12 @@ namespace runic.lexer
             history.Add(new Entry(rhyme, rune, success));
         }
 
+        public void update_failure(Legend_Result result, int substeps)
+        {
+            if (furthest_success != null && result.stone.current.index != furthest_success.rune.index)
+                return;
+
+            furthest_failure = result;
+        }
     }
 }

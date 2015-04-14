@@ -36,11 +36,17 @@ namespace runic.parser.rhymes
         public override Legend_Result match(Runestone stone, Rhyme parent)
         {
             var results = new List<Legend>();
+            int match_count = -1;
             foreach (var rhyme in rhymes)
             {
+                ++match_count;
+
                 var result = rhyme.match(stone, this);
-                if (result == null)
-                    return null;
+                if (!result.success)
+                {
+                    stone.tracker.update_failure(result, match_count);
+                    return Legend_Result.failure(this, stone, result, match_count);
+                }
 
                 if (result.store_legend && !rhyme.is_ghost)
                     results.Add(result.legend);

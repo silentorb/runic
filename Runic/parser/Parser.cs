@@ -119,18 +119,37 @@ namespace runic.parser
             }
 
             var furthest = runes[stone.tracker.furthest];
-            var last = stone.tracker.history.LastOrDefault(h => h.success);
-            if (last == null)
+            //            var last = stone.tracker.history.LastOrDefault(h => h.success);
+            //            if (last == null)
+            //            {
+            //                throw new Exception("Could not find match at 1:1.");
+            //            }
+            //            else
+            //            {
+            //                throw new Exception("Could not find match at "
+            //                    + furthest.range.end.y + ":" + furthest.range.end.x
+            //                    + ", " + furthest.whisper.name + "."
+            //                    + "  Last match was " + last.rhyme.name + "."
+            //                );
+            //            }
+
+            var furthest_success = stone.tracker.furthest_success;
+            var furthest_failure = stone.tracker.furthest_failure;
+            if (furthest_success == null)
             {
                 throw new Exception("Could not find match at 1:1.");
             }
             else
             {
-                throw new Exception("Could not find match at "
-                    + furthest.range.end.y + ":" + furthest.range.end.x
-                    + ", " + furthest.whisper.name + "."
-                    + "  Last match was " + last.rhyme.name + "."
-                );
+                var message = "Could not find match at " + furthest_success.rune.range.start.get_position_string();
+                if (furthest_failure.rhyme != null)
+                {
+                    var rhyme = ((Single_Rhyme)furthest_failure.rhyme);
+                    message += "  Expected '" + rhyme.whisper.name + "' but got "
+                               + furthest_failure.stone.current.text;
+                }
+
+                throw new Exception(message);
             }
         }
     }

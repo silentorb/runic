@@ -12,6 +12,7 @@ namespace runic.lexer
         public Whisper whisper;
         public string text;
         public Range range;
+        public int index;
 
         public Rune(Whisper whisper, string text, Position start, Position end)
         {

@@ -24,19 +24,24 @@ namespace runic.parser.rhymes
 
         public override void initialize(Legend pattern, Parser parser)
         {
-            rhymes = pattern.children.Select(p => parser.create_child(p)).ToList();
+            rhymes = pattern.children.Select(parser.create_child).ToList();
         }
 
         public override Legend_Result match(Runestone stone, Rhyme parent)
         {
+            Legend_Result failure = null;
             foreach (var rhyme in rhymes)
             {
                 var result = rhyme.match(stone, this);
-                if (result != null)
+                if (result.success)
                     return result;
+
+                if (failure == null || result.steps >= failure.steps)
+                    failure = result;
             }
 
-            return null;
+            stone.tracker.update_failure(failure, 0);
+            return Legend_Result.failure(this, stone, failure, 0);
         }
 
         override public IEnumerable<Rhyme> aggregate()

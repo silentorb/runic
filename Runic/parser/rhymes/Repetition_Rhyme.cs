@@ -65,14 +65,15 @@ namespace runic.parser.rhymes
             var matches = new List<Legend>();
             var dividers = new List<Legend>();
             Legend last_divider = null;
+            Legend_Result main_result;
 
             var final_stone = stone;
             var track_dividers = divider != null && has_variable_dividers;
 
             do
             {
-                var main_result = rhyme.match(stone, this);
-                if (main_result == null)
+                main_result = rhyme.match(stone, this);
+                if (!main_result.success)
                     break;
 
                 matches.Add(main_result.legend);
@@ -84,7 +85,7 @@ namespace runic.parser.rhymes
                 {
                     var divider_result = divider.match(stone, this);
 
-                    if (divider_result == null)
+                    if (!divider_result.success)
                         break;
 
                     last_divider = divider_result.legend;
@@ -94,14 +95,16 @@ namespace runic.parser.rhymes
             while (max == 0 || matches.Count < max);
 
             if (matches.Count < min)
-                return null;
-
+            {
+                stone.tracker.update_failure(main_result, matches.Count);
+                return Legend_Result.failure(this, stone, main_result, matches.Count);
+            }
             // The equivalent of ? in a regex
             if (max == 1 && min == 0)
             {
                 if (matches.Count == 1)
                     return new Legend_Result(matches[0], final_stone);
-
+             
                 return new Legend_Result(null, final_stone) { store_legend = true };
             }
 
