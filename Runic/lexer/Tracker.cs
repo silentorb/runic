@@ -35,7 +35,12 @@ namespace runic.lexer
         public List<Entry> history = new List<Entry>();
         public void add_entry(bool success, Rhyme rhyme, Rune rune)
         {
-            history.Add(new Entry(rhyme, rune, success));
+            var entry = new Entry(rhyme, rune, success);
+            history.Add(entry);
+            if (furthest_success == null || rune.index >= furthest_success.rune.index)
+            {
+                furthest_success = entry;
+            }
         }
 
         public void update_failure(Legend_Result result, int substeps)
