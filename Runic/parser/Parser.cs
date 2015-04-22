@@ -141,12 +141,15 @@ namespace runic.parser
             }
             else
             {
-                var message = "Could not find match at " + furthest_success.rune.range.start.get_position_string();
+                var message = "Could not find match at " + furthest_success.rune.range.end.get_position_string();
                 if (furthest_failure.rhyme != null)
                 {
-                    var rhyme = ((Single_Rhyme)furthest_failure.rhyme);
-                    message += "  Expected '" + rhyme.whisper.name + "' but got "
-                               + furthest_failure.stone.current.text;
+                    if (furthest_failure.rhyme.type == Rhyme_Type.single)
+                    {
+                        var rhyme = ((Single_Rhyme) furthest_failure.rhyme);
+                        message += "  Expected '" + rhyme.whisper.name + "' but got "
+                                   + furthest_failure.stone.current.text;
+                    }
                 }
 
                 throw new Exception(message);

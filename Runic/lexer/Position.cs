@@ -22,26 +22,31 @@ namespace runic.lexer
             this.source = source;
         }
 
-        public Position clone()
+        private Position clone()
         {
             return new Position(source)
-                {
-                    x = x,
-                    y = y,
-                    index = index
-                };
+            {
+                x = x,
+                y = y,
+                index = index
+            };
         }
 
         public Position forward(int steps)
         {
+            return clone()._forward(steps);
+        }
+
+        private Position _forward(int steps)
+        {
             var end = index + steps;
-            while(index < end)
+            while (index < end)
             {
                 var c = source[index];
                 if (c == '\n')
                 {
                     ++y;
-                    x = 0;
+                    x = 1;
                 }
                 else if (c == '\t')
                 {
@@ -56,7 +61,6 @@ namespace runic.lexer
 
             return this;
         }
-
 
         public string get_position_string()
         {

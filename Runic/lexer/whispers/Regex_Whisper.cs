@@ -54,7 +54,7 @@ namespace runic.lexer
                 }
             }
 
-            return new Rune(this, value, position.clone(), position.forward(match.Length).clone());
+            return new Rune(this, value, position, position.forward(match.Length));
         }
     }
 }
