@@ -33,6 +33,9 @@ namespace runic.lexer
         public Legend_Result furthest_failure;
         public int furthest;
         public List<Entry> history = new List<Entry>();
+        public List<Rune> runes;
+        public string source;
+ 
         public void add_entry(bool success, Rhyme rhyme, Rune rune)
         {
             var entry = new Entry(rhyme, rune, success);

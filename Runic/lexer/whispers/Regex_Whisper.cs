@@ -16,7 +16,7 @@ namespace runic.lexer
             regex = new Regex("\\G" + pattern);
         }
 
-        public override Rune match(string input, Position position)
+        public override Rune match(string input, Position position, int max = 0)
         {
             var match = regex.Match(input, position.index);
             if (!match.Success)
@@ -42,10 +42,10 @@ namespace runic.lexer
 
             if (targets != null)
             {
-                var child_position = new Position(value);
+//                var child_position = new Position(value);
                 foreach (var target in targets)
                 {
-                    var child_match = target.match(value, child_position);
+                    var child_match = target.match(input, position, value.Length);
                     if (child_match != null && child_match.length == value.Length)
                     {
                         position.forward(value.Length);

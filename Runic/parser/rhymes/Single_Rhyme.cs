@@ -47,7 +47,7 @@ namespace runic.parser.rhymes
             if (stone.current.whisper.has_attribute(Whisper.Attribute.optional))
                 return match(stone.next(), parent);
 
-            stone.tracker.add_entry(false, this, stone.current);
+//            stone.tracker.add_entry(false, this, stone.current);
             var failure = Legend_Result.failure(this, stone, null, 0);
             stone.tracker.update_failure(failure, 0);
             return failure;
@@ -61,6 +61,21 @@ namespace runic.parser.rhymes
 
         private Legend_Result check(Whisper wisp, Runestone stone)
         {
+            if (whisper.has_attribute(Whisper.Attribute.tween))
+            {
+                var previous = stone.tracker.runes[stone.current.index - 1];
+                var end = previous.range.end.index;
+                var text = stone.tracker.source.Substring(end, stone.current.range.start.index - end);
+                var regex_whisper = (Regex_Whisper) whisper;
+                var match = regex_whisper.regex.Match(text);
+                if (match.Success)
+                {
+                    return new Legend_Result(null, stone);
+                }
+
+                return null;
+            }
+
             if (wisp == stone.current.whisper)
             {
                 stone.tracker.add_entry(true, this, stone.current);

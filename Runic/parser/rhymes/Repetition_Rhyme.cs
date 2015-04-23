@@ -96,7 +96,7 @@ namespace runic.parser.rhymes
 
             if (matches.Count < min)
             {
-                stone.tracker.update_failure(main_result, matches.Count);
+//                stone.tracker.update_failure(main_result, matches.Count);
                 return Legend_Result.failure(this, stone, main_result, matches.Count);
             }
             // The equivalent of ? in a regex

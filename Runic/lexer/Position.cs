@@ -14,6 +14,7 @@ namespace runic.lexer
         // Make sure this is not modified or there will be some serious performance hits with large code strings.
         private string source;
         public static int tab_length = 4;
+        public Position previous;
 
         public Position(string source)
         {
@@ -34,7 +35,9 @@ namespace runic.lexer
 
         public Position forward(int steps)
         {
-            return clone()._forward(steps);
+            var result = clone()._forward(steps);
+            result.previous = this;
+            return result;
         }
 
         private Position _forward(int steps)

@@ -32,10 +32,12 @@ namespace runic.lexer
             get { return position == runes.Count; }
         }
 
-        public Runestone(List<Rune> runes)
+        public Runestone(string source, List<Rune> runes)
         {
             this.runes = runes;
             tracker = new Tracker();
+            tracker.runes = runes;
+            tracker.source = source;
             position = 0;
         }
 

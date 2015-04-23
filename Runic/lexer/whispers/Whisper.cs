@@ -17,7 +17,8 @@ namespace runic.lexer
         public enum Attribute
         {
             ignore,
-            optional
+            optional,
+            tween
         }
 
         public string name;
@@ -31,7 +32,7 @@ namespace runic.lexer
             this.name = name;
         }
 
-        public abstract Rune match(string input, Position position);
+        public abstract Rune match(string input, Position position, int max = 0);
 
         public bool has_attribute(Attribute attribute)
         {

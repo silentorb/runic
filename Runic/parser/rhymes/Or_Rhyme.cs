@@ -40,7 +40,7 @@ namespace runic.parser.rhymes
                     failure = result;
             }
 
-            stone.tracker.update_failure(failure, 0);
+//            stone.tracker.update_failure(failure, 0);
             return Legend_Result.failure(this, stone, failure, 0);
         }
 

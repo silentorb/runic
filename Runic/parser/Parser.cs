@@ -29,7 +29,7 @@ namespace runic.parser
         void load_grammar(string lexicon)
         {
             var runes = Lexer.parser_lexicon.read(lexicon);
-            var legend = read(runes, parser_grammar.start);
+            var legend = read(lexicon, runes, parser_grammar.start);
             process_grammar(legend.children);
         }
 
@@ -97,15 +97,15 @@ namespace runic.parser
             throw new Exception("Not supported.");
         }
 
-        public Legend read(List<Rune> runes, string start_name = "start")
+        public Legend read(string source, List<Rune> runes, string start_name = "start")
         {
             var start = rhymes[start_name];
-            return read(runes, start);
+            return read(source, runes, start);
         }
 
-        public static Legend read(List<Rune> runes, Rhyme start)
+        public static Legend read(string source, List<Rune> runes, Rhyme start)
         {
-            var stone = new Runestone(runes);
+            var stone = new Runestone(source, runes);
             var result = start.match(stone, null);
 
             if (result != null)
@@ -148,7 +148,7 @@ namespace runic.parser
                     {
                         var rhyme = ((Single_Rhyme) furthest_failure.rhyme);
                         message += "  Expected '" + rhyme.whisper.name + "' but got "
-                                   + furthest_failure.stone.current.text;
+                                   + runes[furthest_success.rune.index + 1].text;
                     }
                 }
 

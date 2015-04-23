@@ -44,7 +44,7 @@ namespace runic.parser.rhymes
                 var result = rhyme.match(stone, this);
                 if (!result.success)
                 {
-                    stone.tracker.update_failure(result, match_count);
+//                    stone.tracker.update_failure(result, match_count);
                     return Legend_Result.failure(this, stone, result, match_count);
                 }
 

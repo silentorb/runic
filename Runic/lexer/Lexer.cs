@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using runic.lexer.whispers;
 using runic.parser;
 
 namespace runic.lexer
@@ -25,7 +26,7 @@ namespace runic.lexer
         void load_lexicon(string lexicon)
         {
             var runes = lexer_lexicon.read(lexicon);
-            var legend = Parser.read(runes, Parser.lexer_grammar.start);
+            var legend = Parser.read(lexicon, runes, Parser.lexer_grammar.start);
             process_lexicon(legend.children);
         }
 
@@ -101,7 +102,13 @@ namespace runic.lexer
             }
 
             if (whisper_attributes.Count > 0)
+            {
                 whisper.attributes = whisper_attributes.ToArray();
+//                if (whisper.has_attribute(Whisper.Attribute.tween))
+//                {
+//                    whispers[name] = new Tween(whisper.name, source.children[2].children[0].text);
+//                }
+            }
         }
 
         Whisper create_whisper(Legend source)
@@ -156,6 +163,8 @@ namespace runic.lexer
                     rune.index = result.Count;
                     result.Add(rune);
                 }
+
+                position = rune.range.end;
             }
 
             return result;
