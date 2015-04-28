@@ -12,20 +12,20 @@ namespace runic.lexer
         public int index { get; private set; }
 
         // Make sure this is not modified or there will be some serious performance hits with large code strings.
-        private string source;
+        public Meadow meadow;
         public static int tab_length = 4;
         public Position previous;
 
-        public Position(string source)
+        public Position(Meadow meadow)
         {
             x = 1;
             y = 1;
-            this.source = source;
+            this.meadow = meadow;
         }
 
         private Position clone()
         {
-            return new Position(source)
+            return new Position(meadow)
             {
                 x = x,
                 y = y,
@@ -45,7 +45,7 @@ namespace runic.lexer
             var end = index + steps;
             while (index < end)
             {
-                var c = source[index];
+                var c = meadow.content[index];
                 if (c == '\n')
                 {
                     ++y;

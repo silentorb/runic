@@ -81,7 +81,7 @@ namespace runic.parser.rhymes
                 stone.tracker.add_entry(true, this, stone.current);
                 var legend = whisper.has_attribute(Whisper.Attribute.optional)
                     ? null
-                    : new String_Legend(this, stone.current.text);
+                    : new String_Legend(this, stone.current.text, stone.current.range.start);
 
                 return new Legend_Result(legend, stone.next());
             }

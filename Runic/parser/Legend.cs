@@ -19,6 +19,7 @@ namespace runic.parser
 //        public Legend_Type type;
         public abstract string text { get; }
         public abstract List<Legend> children { get; }
+        public Position position;
 
         public virtual string type
         {
@@ -40,11 +41,12 @@ namespace runic.parser
             get { return null; }
         }
 
-        public String_Legend(Rhyme rhyme, string text)
+        public String_Legend(Rhyme rhyme, string text, Position position)
         {
 //            type = Legend_Type.text;
             this.rhyme = rhyme;
             _text = text;
+            this.position = position;
         }
     }
 
@@ -64,12 +66,13 @@ namespace runic.parser
             get { return _children; }
         }
 
-        public Group_Legend(Rhyme rhyme, List<Legend> children, List<Legend> dividers = null)
+        public Group_Legend(Rhyme rhyme, List<Legend> children, Position position, List<Legend> dividers = null)
         {
 //            type = Legend_Type.group;
             this.rhyme = rhyme;
             _children = children;
             this.dividers = dividers;
+            this.position = position;
         }
     }
 }

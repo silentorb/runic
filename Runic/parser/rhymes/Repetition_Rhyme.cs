@@ -108,7 +108,7 @@ namespace runic.parser.rhymes
                 return new Legend_Result(null, final_stone) { store_legend = true };
             }
 
-            return new Legend_Result(new Group_Legend(this, matches, dividers), final_stone);
+            return new Legend_Result(new Group_Legend(this, matches, stone.current.range.start, dividers), final_stone);
 
             //            return divider != null && has_variable_dividers
             //                ? match_tracking_dividers(stone)

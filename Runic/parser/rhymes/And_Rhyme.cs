@@ -56,7 +56,7 @@ namespace runic.parser.rhymes
 
             var legend = should_return_single(results, parent)
                 ? results[0]
-                : new Group_Legend(this, results);
+                : new Group_Legend(this, results, stone.current.range.start);
 
             return new Legend_Result(legend, stone);
         }

@@ -35,6 +35,7 @@ namespace runic.lexer
         public List<Entry> history = new List<Entry>();
         public List<Rune> runes;
         public string source;
+        public string source_filename;
  
         public void add_entry(bool success, Rhyme rhyme, Rune rune)
         {

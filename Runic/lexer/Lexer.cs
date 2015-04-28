@@ -24,7 +24,7 @@ namespace runic.lexer
 
         void load_lexicon(string lexicon)
         {
-            var runes = lexer_lexicon.read(lexicon);
+            var runes = lexer_lexicon.read(lexicon, "");
             var legend = Parser.read(lexicon, runes, Parser.lexer_grammar.start);
             process_lexicon(legend.children);
         }
@@ -143,10 +143,10 @@ namespace runic.lexer
             throw new Exception("Unknown whisper type: " + source.type + ".");
         }
 
-        public List<Rune> read(string input)
+        public List<Rune> read(string input, string filename)
         {
             var result = new List<Rune>();
-            var position = new Position(input);
+            var position = new Position(new Meadow(input, filename));
 
             while (position.index < input.Length)
             {

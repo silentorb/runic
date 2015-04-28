@@ -28,7 +28,7 @@ namespace runic.parser
 
         void load_grammar(string lexicon)
         {
-            var runes = Lexer.parser_lexicon.read(lexicon);
+            var runes = Lexer.parser_lexicon.read(lexicon, "");
             var legend = read(lexicon, runes, parser_grammar.start);
             process_grammar(legend.children);
         }
