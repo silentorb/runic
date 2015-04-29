@@ -17,5 +17,12 @@ namespace runic.parser
            this.filename = filename;
            this.position = position;
        }
+
+       public Parser_Exception(string message, Position position)
+           : base(message)
+       {
+           filename = position.meadow.filename;
+           this.position = position;
+       }
     }
 }

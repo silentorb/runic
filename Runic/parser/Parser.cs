@@ -147,12 +147,12 @@ namespace runic.parser
                     if (furthest_failure.rhyme.type == Rhyme_Type.single)
                     {
                         var rhyme = ((Single_Rhyme) furthest_failure.rhyme);
-                        message += "  Expected '" + rhyme.whisper.name + "' but got "
+                        message = "Expected '" + rhyme.whisper.name + "' but got "
                                    + runes[furthest_success.rune.index + 1].text;
                     }
                 }
 
-                throw new Exception(message);
+                throw new Parser_Exception(message, furthest_success.rune.range.end);
             }
         }
     }
