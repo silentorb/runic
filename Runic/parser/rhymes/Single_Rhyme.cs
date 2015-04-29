@@ -61,7 +61,7 @@ namespace runic.parser.rhymes
 
         private Legend_Result check(Whisper wisp, Runestone stone)
         {
-            if (whisper.has_attribute(Whisper.Attribute.tween))
+            if (whisper.has_attribute(Whisper.Attribute.tween) && stone.current.index > 0)
             {
                 var previous = stone.tracker.runes[stone.current.index - 1];
                 var end = previous.range.end.index;
