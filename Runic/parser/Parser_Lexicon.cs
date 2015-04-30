@@ -7,7 +7,7 @@ namespace runic.lexer
 {
     public class Parser_Lexicon : Lexer
     {
-        public Regex_Whisper id = new Regex_Whisper("id", @"[\$a-zA-Z0-9_]+");
+        public Regex_Whisper id = new Regex_Whisper("id", @"[\$a-zA-Z0-9_<>]+");
         public String_Whisper or = new String_Whisper("or", "|");
         public Regex_Whisper string_value = new Regex_Whisper("string", "\"([^\"]*)\"|\\G'([^']*)'");
         public String_Whisper start_rep = new String_Whisper("start_rep", "@(");

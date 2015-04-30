@@ -119,20 +119,6 @@ namespace runic.parser
             }
 
             var furthest = runes[stone.tracker.furthest];
-            //            var last = stone.tracker.history.LastOrDefault(h => h.success);
-            //            if (last == null)
-            //            {
-            //                throw new Exception("Could not find match at 1:1.");
-            //            }
-            //            else
-            //            {
-            //                throw new Exception("Could not find match at "
-            //                    + furthest.range.end.y + ":" + furthest.range.end.x
-            //                    + ", " + furthest.whisper.name + "."
-            //                    + "  Last match was " + last.rhyme.name + "."
-            //                );
-            //            }
-
             var furthest_success = stone.tracker.furthest_success;
             var furthest_failure = stone.tracker.furthest_failure;
             if (furthest_success == null)
