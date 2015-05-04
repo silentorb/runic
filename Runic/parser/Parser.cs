@@ -122,24 +122,20 @@ namespace runic.parser
             var furthest_success = stone.tracker.furthest_success;
             var furthest_failure = stone.tracker.furthest_failure;
             if (furthest_success == null)
-            {
                 throw new Exception("Could not find match at 1:1.");
-            }
-            else
-            {
-                var message = "Could not find match at " + furthest_success.rune.range.end.get_position_string();
-                if (furthest_failure.rhyme != null)
-                {
-                    if (furthest_failure.rhyme.type == Rhyme_Type.single)
-                    {
-                        var rhyme = ((Single_Rhyme) furthest_failure.rhyme);
-                        message = "Expected '" + rhyme.whisper.name + "' but got "
-                                   + runes[furthest_success.rune.index + 1].text;
-                    }
-                }
 
-                throw new Parser_Exception(message, furthest_success.rune.range.end);
+            var message = "Could not find match at " + furthest_success.rune.range.end.get_position_string();
+            if (furthest_failure != null && furthest_failure.rhyme != null)
+            {
+                if (furthest_failure.rhyme.type == Rhyme_Type.single)
+                {
+                    var rhyme = ((Single_Rhyme)furthest_failure.rhyme);
+                    message = "Expected '" + rhyme.whisper.name + "' but got "
+                               + runes[furthest_success.rune.index + 1].text;
+                }
             }
+
+            throw new Parser_Exception(message, furthest_success.rune.range.end);
         }
     }
 }
