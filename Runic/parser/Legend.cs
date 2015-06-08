@@ -16,7 +16,7 @@ namespace runic.parser
     public abstract class Legend
     {
         public Rhyme rhyme;
-//        public Legend_Type type;
+        public string source_file = "unknown";
         public abstract string text { get; }
         public abstract List<Legend> children { get; }
         public Position position;

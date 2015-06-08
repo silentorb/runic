@@ -6,7 +6,7 @@ using System.Text;
 
 namespace runic.lexer
 {
-    [DebuggerDisplay("Rune {text}")]
+    [DebuggerDisplay("Rune {text} {range.start.y}:{range.start.x}")]
     public class Rune
     {
         public Whisper whisper;
