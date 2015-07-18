@@ -1,0 +1,44 @@
+﻿runic {
+
+	Lexer {
+
+		Rune[] read(string input, string filename)
+        {
+            var result = new Rune[];
+            var position = new Position(new Meadow(input, filename));
+
+            while (position.index < input.Length)
+            {
+                var rune = next(input, position);
+                if (rune == null)
+                    throw new Exception("Could not find match at " + position.get_position_string() + " " + get_safe_substring(input, position.index, 10));
+
+                if (rune.length == 0)
+                    throw new Exception("Invalid Whisper:" + rune.whisper.name);
+
+                if (!rune.whisper.has_attribute(Whisper.Attribute.ignore))
+                {
+                    rune.index = result.Count;
+                    result.Add(rune);
+                }
+
+                position = rune.range.end;
+            }
+
+            return result;
+        }
+		
+        Rune next(string input, Position position)
+        {
+            foreach (var whisper in whispers.Values)
+            {
+                var rune = whisper.match(input, position);
+                if (rune != null)
+                    return rune;
+            }
+
+            return null;
+        }
+
+	}
+}

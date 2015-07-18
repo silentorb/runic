@@ -15,7 +15,7 @@ namespace runic.lexer
         public String_Whisper end_group = new String_Whisper("end_group", ")");
         public String_Whisper equals = new String_Whisper("equals", "=");
         public String_Whisper comma = new String_Whisper("comma", ",");
-        public Regex_Whisper regex = new Regex_Whisper("regex", @"/([^/]+)/");
+        public Regex_Whisper regex = new Regex_Whisper("regex", @"/((?:\\/|[^/])+)/");
         public Regex_Whisper newlines = new Regex_Whisper("newlines", @"(\s*\n)+\s*")
         {
             attributes = new[] { Whisper.Attribute.optional }

@@ -22,9 +22,6 @@ namespace runic.parser
                 new Single_Rhyme(lexer.regex)
             });
 
-//            var repetition = new Repetition_Rhyme(option, 2, 0);
-//            option.rhymes.Add(repetition);
-
             var attribute_options = new Or_Rhyme("attribute_options", new List<Rhyme>
             {
                 new Single_Rhyme(lexer.attribute_id),
@@ -37,8 +34,6 @@ namespace runic.parser
                 new Repetition_Rhyme(attribute_options, new Single_Rhyme(lexer.comma), 0, 0),
                 new Single_Rhyme(lexer.end_group)
             });
-
-
 
             var rule = new And_Rhyme("rule", new List<Rhyme>
             {
