@@ -25,6 +25,7 @@ namespace runic.lexer
         public Attribute[] attributes;
         public Whisper_Type type;
         public List<Whisper> targets;
+        public Whisper_Group parent = null;
 
         protected Whisper(Whisper_Type type, string name)
         {

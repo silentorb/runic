@@ -70,6 +70,7 @@ namespace runic.lexer
                         if (p.type == "string" || p.type == "regex")
                             add_whisper(child.name, child);
 
+                        child.parent = whisper;
                         return child;
                     }).ToArray();
             }

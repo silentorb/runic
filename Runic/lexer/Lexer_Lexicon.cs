@@ -22,7 +22,6 @@ namespace runic.lexer
         };
 //        public String_Whisper forward_slash = new String_Whisper("forward_slash", "/");
 
-
         public Lexer_Lexicon()
         {
             add_whisper(new Regex_Whisper("spaces", @"[ \t]+") { attributes = new[] { Whisper.Attribute.ignore } });

@@ -1,0 +1,24 @@
+﻿runic.lexer {
+
+    Lexer {
+        whispers:Dictionary<string, Whisper>
+
+        add_whisper(whisper:Whisper)
+    }
+
+    Whisper {
+        constructor(name:string)
+    }
+
+    Regex_Whisper : Whisper     {
+        constructor(name:string, pattern:string)
+    }
+
+    String_Whisper : Whisper {
+        constructor(name:string, text:string)
+    }
+
+    Whisper_Group : Whisper{
+        constructor(name:string)
+    }
+}

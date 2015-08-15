@@ -18,6 +18,10 @@ namespace runic.lexer
             : base(Whisper_Type.group, name)
         {
             this.whispers = whispers.ToArray();
+            foreach (var whisper in this.whispers)
+            {
+                whisper.parent = this;
+            }
         }
 
         public override Rune match(string input, Position position, int max = 0)
