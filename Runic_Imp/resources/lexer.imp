@@ -2,6 +2,8 @@
 
     Lexer {
         whispers:Dictionary<string, Whisper>
+        static lexer_lexicon:Lexer_Lexicon = new Lexer_Lexicon()
+        static parser_lexicon:Parser_Lexicon = new Parser_Lexicon()
 
         add_whisper(whisper:Whisper)
     }
