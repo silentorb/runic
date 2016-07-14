@@ -1,0 +1,9 @@
+lookinglass {
+
+    Element {
+        type:Element_Type
+        constructor(value) {
+            type = type
+        }
+    }
+}

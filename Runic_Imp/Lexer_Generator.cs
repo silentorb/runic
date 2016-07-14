@@ -21,7 +21,7 @@ namespace runic_imp
         public static void initialize(Overlord overlord)
         {
             var code = Utility.load_resource("lexer.imp");
-            overlord.summon(code, "lexer.imp", true);
+            overlord.summon(code, "lexer.imp", null, true);
 
             var realm = overlord.root.dungeons["runic"].dungeons["lexer"];
 
@@ -38,10 +38,8 @@ namespace runic_imp
 
         public static Dungeon generate(string name, Lexer lexer, Overlord overlord, Dungeon realm)
         {
-            var dungeon = new Dungeon(name, overlord, realm, lexer_dungeon);
-            var constructor = new Minion("constructor", dungeon);
-            constructor.parameters = new List<Parameter>();
-            dungeon.minions.Add("constructor", constructor);
+            var dungeon = new Dungeon(name, overlord, realm, overlord.library.get(lexer_dungeon));
+            var constructor = dungeon.spawn_minion("constructor", new List<Parameter>());
 
             foreach (var whisper in lexer.whispers.Values)
             {
@@ -54,16 +52,14 @@ namespace runic_imp
 
         public static void convert_whisper(Whisper whisper, Dungeon dungeon)
         {
-            var constructor = dungeon.minions["constructor"];
+            var constructor = dungeon.minions_old["constructor"];
             var add_minion = dungeon.summon_minion("add_whisper", true);
 
             var type = whisper_types[whisper.type];
-            //            var portal = new Portal(whisper.name, new Profession(type), dungeon);
-            //            dungeon.add_portal(portal);
             if (whisper.type == Whisper_Type.@group)
             {
-                var list_profession = Profession.create(Professions.List, true,
-                    new List<Profession> { Profession.create(whisper_dungeon) });
+                var list_profession = dungeon.overlord.library.get(Professions.List,
+                    new List<Profession> { dungeon.overlord.library.get(whisper_dungeon) });
 
                 constructor.expressions.Add(new Method_Call(add_minion, null,
                    new Instantiate(type, new Expression[]
