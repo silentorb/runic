@@ -38,7 +38,7 @@ namespace runic_imp
 
         public static Dungeon generate(string name, Lexer lexer, Overlord overlord, Dungeon realm)
         {
-            var dungeon = new Dungeon(name, overlord, realm, overlord.library.get(lexer_dungeon));
+            var dungeon = new Dungeon(name, overlord, realm, overlord.library.main_get(lexer_dungeon));
             var constructor = dungeon.spawn_minion("constructor", new List<Parameter>());
 
             foreach (var whisper in lexer.whispers.Values)
@@ -58,8 +58,8 @@ namespace runic_imp
             var type = whisper_types[whisper.type];
             if (whisper.type == Whisper_Type.@group)
             {
-                var list_profession = dungeon.overlord.library.get(Professions.List,
-                    new List<Profession> { dungeon.overlord.library.get(whisper_dungeon) });
+                var list_profession = dungeon.overlord.library.main_get(Professions.List,
+                    new List<Profession> { dungeon.overlord.library.main_get(whisper_dungeon) });
 
                 constructor.expressions.Add(new Method_Call(add_minion, null,
                    new Instantiate(type, new Expression[]
